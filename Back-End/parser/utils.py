@@ -1,7 +1,6 @@
 import itertools
-from parser.Grammar import GRAMMAR
-from parser.SpecFamily import SpecFamily
-
+from SpecFamily import SpecFamily
+from Grammar import GRAMMAR
 """
 G[S_]:
         S_ → S
@@ -9,11 +8,6 @@ G[S_]:
         B  → bB|a
 """
 
-grammar = {
-    'S_': (['S'],),
-    'S': (['B', 'B'],),
-    'B': (['b', 'B'], ['a'])
-}
 
 NON_TERMINATOR_LIST = ['S_', 'S', 'B']
 TERMINATORS_LIST = ['a', 'b']
@@ -31,12 +25,13 @@ follow = {
 }
 
 non_terminator_counts = len(NON_TERMINATOR_LIST)
-
 nullable_non_terminator = []
 
 
+
+
 def find_first(target_non_terminator, current_non_terminator):
-    decisions = grammar.get(current_non_terminator)
+    decisions = GRAMMAR.get(current_non_terminator)
     for decision in decisions:
         first_sym = decision[0]
         if first_sym in NON_TERMINATOR_LIST:
@@ -52,22 +47,20 @@ def find_follow(begin_non_terminator):
 
     subset_relationships = set()
     for non_terminator_, non_terminator_to_search in search_list:
-        decisions = grammar.get(non_terminator_to_search)
+        decisions = GRAMMAR.get(non_terminator_to_search)
 
         for decision in decisions:
 
             index = find_index(non_terminator_, decision)
             if index is None:
                 continue
-            
+
             for i in index:
                 if i == len(decision) - 1:
-
                     subset_relationships.add((non_terminator_, non_terminator_to_search))
                     continue
 
                 if backward_nullable(decision[i + 1:]):
-
                     subset_relationships.add((non_terminator_, non_terminator_to_search))
                 if i != len(decision) - 1:
                     next_symbol = decision[i + 1]
@@ -88,19 +81,20 @@ def find_follow(begin_non_terminator):
 def backward_nullable(backward_list):
     return set(backward_list).issubset(set(nullable_non_terminator))
 
-def find_index(target, _list):
 
+def find_index(target, _list):
     if target in _list:
         return [i for i, x in enumerate(_list) if x == target]
     else:
         return None
 
+
 def closure(grammar):
     sf = SpecFamily(grammar)
-    sf.extendedGrammar()
+    sf.computeSpecFamilyItem()
     ...
 
 
 if __name__ == '__main__':
-    grammar = GRAMMAR
-    closure(grammar)
+    GRAMMAR = GRAMMAR
+    closure(GRAMMAR)
