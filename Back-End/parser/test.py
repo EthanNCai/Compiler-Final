@@ -1,4 +1,5 @@
-from SpecFamily import SpecFamily, SpecFamilyItem
+from AnalysisTable import AnalysisTable
+from SpecFamily import SpecFamilyItem, SpecFamily
 
 
 GRAMMAR = {
@@ -86,3 +87,12 @@ spec_family.insertSpecFamilyItem(spec_family_item_8)
 spec_family_item_9 = SpecFamilyItem(state=9)
 spec_family_item_9.insertContent("B", ["b", "B", "^"], ["$"])
 spec_family.insertSpecFamilyItem(spec_family_item_9)
+
+
+def main():
+    analysis_table = AnalysisTable(spec_family)
+    analysis_table.construct_goto()
+    print(analysis_table.goto)
+
+
+main()

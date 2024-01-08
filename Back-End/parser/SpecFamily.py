@@ -25,7 +25,7 @@ class SpecFamilyItem:
         self.transfrom = dict()
 
     def insertContent(self, non_terminator, expression, forward_sym):
-        self.content.append(tuple(non_terminator, expression, forward_sym))
+        self.content.append(tuple([non_terminator, expression, forward_sym]))
 
     def insertTransfrom(self, non_terminator, destination_state):
         self.transfrom[non_terminator] = destination_state
@@ -66,7 +66,7 @@ class SpecFamily:
         self.content = []
 
     def insertIndexList(self, index, non_terminator, expression):
-        self.exgrammar.append((index, non_terminator, expression))
+        self.exgrammar.append(([index, non_terminator, expression]))
 
     def insertSpecFamilyItem(self, specFamilyItem):
         self.content.append(specFamilyItem)
@@ -83,5 +83,3 @@ class SpecFamily:
 
         for tup in self.exgrammar:
             print(tup)
-
-
