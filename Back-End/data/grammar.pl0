@@ -7,12 +7,12 @@ M_STATEMENT -> ε
 CONST -> CONST_ ;
 CONST -> ε
 CONST_ -> const CONST_DEF
-CONST_ -> CONST_ , CONST_  n n   DEF
+CONST_ -> CONST_ , CONST_DEF
 CONST_DEF -> ID = UINT
 
 UINT -> num
 
-VARIABLE -> VARIABLE_ ;++++++++++++++++++++++++++++++
+VARIABLE -> VARIABLE_ ;
 VARIABLE -> ε
 VARIABLE_ -> var ID
 VARIABLE_ -> VARIABLE_ , ID
