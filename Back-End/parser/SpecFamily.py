@@ -12,6 +12,10 @@ def move_caret(right_production) -> list:
     return right_production
 
 
+def first():
+    ...
+
+
 """
 SpecFamilyItem 的结构例子
 {
@@ -98,6 +102,7 @@ class SpecFamily:
     def closureItem(self, specFamilyItem):
         for each_grammar in specFamilyItem.content:
             production = each_grammar[1]
+            fir_sym = each_grammar[2]
             caret_index = production.index('^')
             if caret_index < len(production) - 1:
                 # 确保 '^' 不是最后一个元素
@@ -108,6 +113,15 @@ class SpecFamily:
                         # 对所有的文法，碰到以该符号开头的文法，则加入到项目集
                         if symbol == grammar[1]:
                             right_production = grammar[2].insert(0, '^')
+                            if caret_index + 1 < len(production) - 1:
+                                # 如果^后面的元素不是最后一个元素
+                                ...
+                            else:
+                                # 如果 ^ 后面的元素是最后一个
+                                ...
+
+                            # 添加到当前项目集规范族
+
                             ...
 
         ...
@@ -115,10 +129,10 @@ class SpecFamily:
     def computeSpecFamilyItem(self):
         self.extendedGrammar()
         first_grammar = self.exgrammar[0]
-        fir_right = first_grammar[2].insert(0, '^')
+        first_grammar[2].insert(0, '^')
         fir_sym = '$'
         state = 0
         sfi = SpecFamilyItem(state)
-        sfi.insertContent(non_terminator=first_grammar[1], expression=fir_right, forward_sym=fir_sym)
+        sfi.insertContent(non_terminator=first_grammar[1], expression=first_grammar[2], forward_sym=fir_sym)
         self.closureItem(sfi)
         ...
