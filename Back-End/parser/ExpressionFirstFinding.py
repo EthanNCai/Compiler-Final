@@ -1,6 +1,8 @@
+from Grammar import GRAMMAR, NON_TERMINATOR, TERMINATOR
+
+"""
 NON_TERMINATOR = ['E', 'E_', 'T', 'T_', 'F']
 TERMINATOR = ['+', '*', '(', ')', 'id']
-first = set()
 
 GRAMMAR = {
     'E': (['T', 'E_'],),
@@ -9,6 +11,7 @@ GRAMMAR = {
     'T_': (['*', 'F', 'T_'], ['ε']),
     'F': (['(', 'E', ')'], ['id'])
 }
+"""
 
 """
 使用示例
@@ -20,6 +23,8 @@ find_first(['T_', 'F', 'T_'])
 返回：一个set
 {'(', 'id', '*', 'ε'}
 """
+
+first = set()
 
 
 def recursive_first_finding(current_non_terminator):
@@ -57,7 +62,7 @@ def find_first(expression):
 
 
 def main():
-    print(find_first(['T_', 'F', 'T_']))
+    print(find_first(['B', '$']))
 
 
 if __name__ == '__main__':
