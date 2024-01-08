@@ -10,10 +10,10 @@ GRAMMAR = {
 
 
 spec_family = SpecFamily(grammar=GRAMMAR)
-spec_family.insertIndexList(0, "S_", ["S"])
-spec_family.insertIndexList(1, "S", ["B", "B"])
-spec_family.insertIndexList(2, "B", ["b", "B"])
-spec_family.insertIndexList(3, "B", ["a"])
+spec_family.insertExgrammar(0, "S_", ["S"])
+spec_family.insertExgrammar(1, "S", ["B", "B"])
+spec_family.insertExgrammar(2, "B", ["b", "B"])
+spec_family.insertExgrammar(3, "B", ["a"])
 
 
 # 创建第一个项目

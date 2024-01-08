@@ -78,7 +78,7 @@ class SpecFamily:
         index = 0
         for lp, rp_tuple in self.grammar.items():
             for rp in rp_tuple:
-                self.insertIndexList(index, lp, rp)
+                self.insertExgrammar(index, lp, rp)
                 index += 1
 
         for tup in self.exgrammar:

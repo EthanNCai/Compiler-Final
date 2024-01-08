@@ -1,5 +1,5 @@
 from parser.Grammar import GRAMMAR
-from parser.SpecFamily import SpecFamily, SpecFamilyItem
+from parser.SpecFamily import SpecFamily
 
 
 def first():
