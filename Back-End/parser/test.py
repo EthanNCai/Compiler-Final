@@ -93,6 +93,7 @@ def main():
     analysis_table = AnalysisTable(spec_family)
     print(analysis_table.goto)
     print(analysis_table.action)
+    print(analysis_table.isLR1)
 
 
 main()

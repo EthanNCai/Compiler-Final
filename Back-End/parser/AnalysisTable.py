@@ -98,7 +98,7 @@ class AnalysisTable:
         self.goto = dict()
         self.construct_goto()
         self.construct_action()
-        self.isLR1 = False
+        self.isLR1 = True
 
     def construct_goto(self):
         for specFamilyItem in self.specFamily.content:
@@ -122,7 +122,7 @@ class AnalysisTable:
         for specFamilyItem in self.specFamily.content:
             state_index = specFamilyItem.state
             state_content = specFamilyItem.content
-            state_transfrom = specFamilyItem.transfrom
+            state_transform = specFamilyItem.transfrom
             exGrammar = self.specFamily.exgrammar
             # 加入reduction
             for non_terminator, expression, forward_syms in state_content:
@@ -140,16 +140,23 @@ class AnalysisTable:
                     for forward_sym in forward_syms:
                         if state_index not in self.action:
                             self.action[state_index] = dict()
-                        if forward_sym not in self.action[state_index]:
-                            self.action[state_index] = dict()
+                        if exGrammarIndex == 0:
+                            self.action[state_index][forward_sym] = 'ACC'
+                            continue
+                        # 检查这一格是否已经有项目了（说明冲突）
+                        if forward_sym in self.action[state_index]:
+                            self.isLR1 = False
                         self.action[state_index][forward_sym] = 'R' + \
                             str(exGrammarIndex)
 
             # 加入shift
-            for input, destination in state_transfrom.items():
+            for input, destination in state_transform.items():
                 if input in TERMINATOR:
                     if state_index not in self.action:
                         self.action[state_index] = dict()
+                    # 检查这一格是否已经有项目了（说明冲突）
+                    if input in self.action[state_index]:
+                        self.isLR1 = False
                     self.action[state_index][input] = 'S' + str(destination)
 
         ...
