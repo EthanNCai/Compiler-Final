@@ -102,7 +102,7 @@ class SpecFamily:
             caret_index = production.index('^')
             if caret_index < len(production) - 1:
                 # 确保不是最后一个元素
-                symbol = production[caret_index + 1] # 取^符号后面的操作符
+                symbol = production[caret_index + 1]  # 取^符号后面的操作符
                 if symbol in NON_TERMINATOR:
                     # 是非终结符
                     for grammar in self.exgrammar:
@@ -110,9 +110,7 @@ class SpecFamily:
                         if symbol == grammar[1]:
                             right_production = grammar[2].insert(0, '^')
                             if len(right_production) > 2:
-
-
-
+                                ...
 
         ...
 
