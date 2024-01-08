@@ -65,8 +65,8 @@ class SpecFamily:
         self.exgrammar = []
         self.content = []
 
-    def insertIndexList(self, index, non_terminator, expression):
-        self.exgrammar.append(([index, non_terminator, expression]))
+    def insertExgrammar(self, index, non_terminator, expression):
+        self.exgrammar.append(tuple([index, non_terminator, expression]))
 
     def insertSpecFamilyItem(self, specFamilyItem):
         self.content.append(specFamilyItem)
