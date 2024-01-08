@@ -12,7 +12,7 @@ def follow():
 
 def closure(grammar):
     sf = SpecFamily(grammar)
-    sf.extendedGrammar()
+    sf.computeSpecFamilyItem()
     ...
 
 

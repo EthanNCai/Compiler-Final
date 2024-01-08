@@ -1,3 +1,17 @@
+from Grammar import NON_TERMINATOR, TERMINATOR
+
+
+def move_caret(right_production) -> list:
+    caret_index = right_production.index('^')
+
+    # 后移'^'
+    if caret_index < len(right_production) - 1:  # 确保'^'不是最后一个元素
+        right_production[caret_index], right_production[caret_index + 1] = right_production[caret_index + 1], \
+            right_production[caret_index]
+
+    return right_production
+
+
 """
 SpecFamilyItem 的结构例子
 {
@@ -81,5 +95,32 @@ class SpecFamily:
                 self.insertExgrammar(index, lp, rp)
                 index += 1
 
-        for tup in self.exgrammar:
-            print(tup)
+    def closureItem(self, specFamilyItem):
+        for each_grammar in specFamilyItem.content:
+            production = each_grammar[1]
+            caret_index = production.index('^')
+            if caret_index < len(production) - 1:
+                # 确保不是最后一个元素
+                symbol = production[caret_index + 1] # 取^符号后面的操作符
+                if symbol in NON_TERMINATOR:
+                    # 是非终结符
+                    for grammar in self.exgrammar:
+                        # 对所有的文法，碰到以该符号开头的文法，则加入到项目集
+                        if symbol == grammar[1]:
+                            right_production = grammar[2].insert(0, '^')
+
+
+
+
+        ...
+
+    def computeSpecFamilyItem(self):
+        self.extendedGrammar()
+        first_grammar = self.exgrammar[0]
+        fir_right = first_grammar[2].insert(0, '^')
+        fir_sym = '$'
+        state = 0
+        sfi = SpecFamilyItem(state)
+        sfi.insertContent(non_terminator=first_grammar[1], expression=fir_right, forward_sym=fir_sym)
+
+        ...
