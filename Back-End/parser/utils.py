@@ -1,13 +1,13 @@
 import itertools
 from SpecFamily import SpecFamily
 from Grammar import GRAMMAR
+
 """
 G[S_]:
         S_ → S
         S  → BB
         B  → bB|a
 """
-
 
 NON_TERMINATOR_LIST = ['S_', 'S', 'B']
 TERMINATORS_LIST = ['a', 'b']
@@ -90,7 +90,13 @@ def find_index(target, _list):
 def closure(grammar):
     sf = SpecFamily(grammar)
     sf.computeSpecFamilyItem()
-    ...
+    for each_list in sf.content:
+        print('The grammar:')
+        for content in each_list.content:
+            print(content)
+        print('State: ', each_list.state)
+        print('Transform: ', each_list.transfrom)
+        print('----------------------------')
 
 
 if __name__ == '__main__':
