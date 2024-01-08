@@ -45,7 +45,6 @@ def find_first(target_non_terminator, current_non_terminator):
             first[target_non_terminator].add(first_sym)
 
 
-
 def find_follow(begin_non_terminator):
     follow[begin_non_terminator].add('$')
 
