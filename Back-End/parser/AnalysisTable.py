@@ -96,9 +96,10 @@ class AnalysisTable:
         self.specFamily = specFamily
         self.action = dict()
         self.goto = dict()
+        self.isLR1 = True
         self.construct_goto()
         self.construct_action()
-        self.isLR1 = True
+
 
     def construct_goto(self):
         for specFamilyItem in self.specFamily.content:
