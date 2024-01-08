@@ -9,12 +9,6 @@ G[S_]:
         B  → bB|a
 """
 
-grammar = {
-    'S_': (['S'],),
-    'S': (['B', 'B'],),
-    'B': (['b', 'B'], ['a'])
-}
-
 NON_TERMINATOR_LIST = ['S_', 'S', 'B']
 TERMINATORS_LIST = ['a', 'b']
 
@@ -31,12 +25,11 @@ follow = {
 }
 
 non_terminator_counts = len(NON_TERMINATOR_LIST)
-
 nullable_non_terminator = []
 
 
 def find_first(target_non_terminator, current_non_terminator):
-    decisions = grammar.get(current_non_terminator)
+    decisions = GRAMMAR.get(current_non_terminator)
     for decision in decisions:
         first_sym = decision[0]
         if first_sym in NON_TERMINATOR_LIST:
@@ -52,7 +45,7 @@ def find_follow(begin_non_terminator):
 
     subset_relationships = set()
     for non_terminator_, non_terminator_to_search in search_list:
-        decisions = grammar.get(non_terminator_to_search)
+        decisions = GRAMMAR.get(non_terminator_to_search)
 
         for decision in decisions:
 
@@ -97,9 +90,15 @@ def find_index(target, _list):
 def closure(grammar):
     sf = SpecFamily(grammar)
     sf.computeSpecFamilyItem()
-    ...
+    for each_list in sf.content:
+        print('The grammar: \n')
+        for content in each_list.content:
+            print(content)
+        print('State: ', each_list.state)
+        print('Transform: ', each_list.transfrom)
+        print('----------------------------')
 
 
 if __name__ == '__main__':
-    grammar = GRAMMAR
-    closure(grammar)
+    GRAMMAR = GRAMMAR
+    closure(GRAMMAR)
