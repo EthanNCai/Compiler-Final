@@ -28,8 +28,6 @@ non_terminator_counts = len(NON_TERMINATOR_LIST)
 nullable_non_terminator = []
 
 
-
-
 def find_first(target_non_terminator, current_non_terminator):
     decisions = GRAMMAR.get(current_non_terminator)
     for decision in decisions:
