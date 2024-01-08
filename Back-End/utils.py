@@ -1,4 +1,13 @@
 import itertools
+from parser.Grammar import GRAMMAR
+from parser.SpecFamily import SpecFamily
+
+"""
+G[S_]:
+        S_ → S
+        S  → BB
+        B  → bB|a
+"""
 
 grammar = {
     'S_': (['S'],),
@@ -25,6 +34,7 @@ non_terminator_counts = len(NON_TERMINATOR_LIST)
 
 nullable_non_terminator = []
 
+
 def find_first(target_non_terminator, current_non_terminator):
     decisions = grammar.get(current_non_terminator)
     for decision in decisions:
@@ -33,6 +43,8 @@ def find_first(target_non_terminator, current_non_terminator):
             find_first(target_non_terminator, first_sym)
         else:
             first[target_non_terminator].add(first_sym)
+
+
 
 def find_follow(begin_non_terminator):
     follow[begin_non_terminator].add('$')
@@ -73,6 +85,7 @@ def find_follow(begin_non_terminator):
             _set_, subset = subset_relationship
             follow[_set_].update(set(follow[subset]))
 
+
 def backward_nullable(backward_list):
     return set(backward_list).issubset(set(nullable_non_terminator))
 
@@ -83,13 +96,12 @@ def find_index(target, _list):
     else:
         return None
 
-
-
-
-
-
-
-
-def closure():
+def closure(grammar):
+    sf = SpecFamily(grammar)
+    sf.extendedGrammar()
     ...
 
+
+if __name__ == '__main__':
+    grammar = GRAMMAR
+    closure(grammar)
