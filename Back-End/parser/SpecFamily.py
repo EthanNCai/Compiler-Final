@@ -1,5 +1,4 @@
 from Grammar import NON_TERMINATOR, TERMINATOR
-from ..Utils.utils import test_first
 
 
 def move_caret(right_production) -> list:
@@ -101,7 +100,7 @@ class SpecFamily:
             production = each_grammar[1]
             caret_index = production.index('^')
             if caret_index < len(production) - 1:
-                # 确保不是最后一个元素
+                # 确保 '^' 不是最后一个元素
                 symbol = production[caret_index + 1]  # 取^符号后面的操作符
                 if symbol in NON_TERMINATOR:
                     # 是非终结符
@@ -109,8 +108,7 @@ class SpecFamily:
                         # 对所有的文法，碰到以该符号开头的文法，则加入到项目集
                         if symbol == grammar[1]:
                             right_production = grammar[2].insert(0, '^')
-                            if len(right_production) > 2:
-                                ...
+                            ...
 
         ...
 
@@ -122,5 +120,5 @@ class SpecFamily:
         state = 0
         sfi = SpecFamilyItem(state)
         sfi.insertContent(non_terminator=first_grammar[1], expression=fir_right, forward_sym=fir_sym)
-
+        self.closureItem(sfi)
         ...

@@ -1,6 +1,6 @@
 import itertools
-from ..parser.SpecFamily import SpecFamily
-from ..parser.Grammar import GRAMMAR
+from SpecFamily import SpecFamily
+from Grammar import GRAMMAR
 
 """
 G[S_]:
@@ -97,10 +97,6 @@ def find_index(target, _list):
 def closure(grammar):
     sf = SpecFamily(grammar)
     sf.computeSpecFamilyItem()
-    ...
-
-
-def test_first():
     ...
 
 
