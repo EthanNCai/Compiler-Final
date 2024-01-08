@@ -91,8 +91,9 @@ spec_family.insertSpecFamilyItem(spec_family_item_9)
 
 def main():
     analysis_table = AnalysisTable(spec_family)
-    analysis_table.construct_goto()
     print(analysis_table.goto)
+    print(analysis_table.action)
+    print(analysis_table.isLR1)
 
 
 main()

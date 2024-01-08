@@ -1,4 +1,5 @@
 from Grammar import NON_TERMINATOR, TERMINATOR
+from ..Utils.utils import test_first
 
 
 def move_caret(right_production) -> list:
@@ -108,6 +109,7 @@ class SpecFamily:
                         # 对所有的文法，碰到以该符号开头的文法，则加入到项目集
                         if symbol == grammar[1]:
                             right_production = grammar[2].insert(0, '^')
+                            if len(right_production) > 2:
 
 
 
