@@ -91,7 +91,7 @@ def closure(grammar):
     sf = SpecFamily(grammar)
     sf.computeSpecFamilyItem()
     for each_list in sf.content:
-        print('The grammar: \n')
+        print('The grammar:')
         for content in each_list.content:
             print(content)
         print('State: ', each_list.state)
