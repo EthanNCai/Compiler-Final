@@ -11,7 +11,7 @@ GRAMMAR = {
 # 警告对于'S_': (['S'],), 其 ']' 后面的 ',' 是不可省略的!
 
 PL0_GRAMMAR = {
-    'PROG': (['SUBPROG', '.']),
+    'PROG': (['SUBPROG', '.'],),
     'SUBPROG': (['CONST', 'VARIABLE', 'PROCEDURE', 'M_STATEMENT', 'STATEMENT'],),
     'M_STATEMENT': (['ε'],),
     'CONST': (['CONST_', ';'], ['ε']),
@@ -31,7 +31,7 @@ PL0_GRAMMAR = {
     'M_COND': (['ε'],),
     'CONDITION': (['EXPR', 'REL', 'EXPR'], ['odd', 'EXPR']),
     'EXPR': (['PLUS_MINUS', 'ITEM'], ['EXPR', 'PLUS_MINUS', 'ITEM'], ['ITEM']),
-    'ITEM': (['FACTOR'], ['ITEM', 'MUL_DIV', 'FACTOR']),
+    'ITEM': (['FACTOR'], ['ITEM', 'MUL_DIV', 'FACTOR'],),
     'FACTOR': (['ID'], ['UINT'], ['(', 'EXPR', ')']),
     'PLUS_MINUS': (['+'], ['-']),
     'MUL_DIV': (['*'], ['/']),
@@ -41,7 +41,7 @@ PL0_GRAMMAR = {
     'M_WHILE_FORE': (['ε'],),
     'M_WHILE_TAIL': (['ε'],),
     'READ': (['READ_BEGIN', ')'],),
-    'READ_BEGIN': (['read', '(', 'ID'], ['READ_BEGIN', ',', 'ID']),
+    'READ_BEGIN': (['read', '(', 'ID'], ['READ_BEGIN', ',', 'ID'],),
     'WRITE': (['WRITE_BEGIN', ')'],),
     'WRITE_BEGIN': (['write', '(', 'ID'], ['WRITE_BEGIN', ',', 'ID']),
 }

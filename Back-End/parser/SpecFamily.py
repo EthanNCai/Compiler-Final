@@ -84,4 +84,5 @@ class SpecFamily:
         for tup in self.exgrammar:
             print(tup)
 
-
+    def calculateSpecFamilyItem(self):
+        ...
