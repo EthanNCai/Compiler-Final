@@ -1,0 +1,112 @@
+
+[
+    {
+        "state": 0,
+        "content":[
+            {"S_":["^","S"],"forward_sym":["$"]},
+            {"S":["^","B","B"],"forward_sym":["$"]},
+            {"B":["^","S"],"forward_sym":["a","b"]},
+            {"B":["^","$"],"forward_sym":["a","b"]}
+        ],
+        "transform":{
+            "S":1,
+            "B":2,
+            "b":3,
+            "a":4
+        }
+    },
+    {
+        "state": 1,
+        "content":[
+            {"S_":["S","^"],"forward_sym":["$"]}
+        ],
+        "transform":{
+        }
+        
+    },
+    {
+        "state": 2,
+        "content":[
+            {"S":["B","^","B"],"forward_sym":["$"]},
+            {"B":["^","b","B"],"forward_sym":["$"]},
+            {"B":["^","a"],"forward_sym":["$"]}
+        ],
+        "transform":{
+            "B":5,
+            "b":6,
+            "a":7
+        }
+    },
+    {
+        "state": 3,
+        "content":[
+            {"B":["b","^","B"],"forward_sym":["b","a"]},
+            {"B":["^","b","B"],"forward_sym":["b","a"]},
+            {"B":["^","a"],"forward_sym":["b","a"]}
+        ],
+        "transform":{
+            "b":3,
+            "B":8,
+            "a":4
+        }
+    },
+    {
+        "state": 4,
+        "content":[
+            {"B":["a","^"],"forward_sym":["a","b"]}
+        ],
+        "transform":{
+
+        }
+    },
+    {
+        "state": 5,
+        "content":[
+            {"S":["B","B","^"],"forward_sym":["$"]}
+        ],
+        "transform":{
+
+        }
+    },
+    {
+        "state": 6,
+        "content":[
+            {"B":["b","^","B"],"forward_sym":["$"]},
+            {"B":["^","b","B"],"forward_sym":["$"]},
+            {"B":["^","a"],"forward_sym":["$"]}
+        ],
+        "transform":{
+            "a":7,
+            "b":6,
+            "B":9
+        }
+    },
+    {
+        "state": 7,
+        "content":[
+            {"B":["a","^"],"forward_sym":["$"]}
+        ],
+        "transform":{
+        }
+    },
+    {
+        "state": 8,
+        "content":[
+            {"B":["b","B","^"],"forward_sym":["a","b"]}
+        ],
+        "transform":{
+        }
+    },
+    {
+        "state": 9,
+        "content":[
+            {"B":["b","B","^"],"forward_sym":["$"]}
+        ],
+        "transform":{
+        }
+    }
+]
+
+
+
+
