@@ -1,5 +1,3 @@
-
-
 """
 SpecFamilyItem 的结构例子
 {
@@ -64,11 +62,26 @@ class SpecFamily:
     def __init__(self, grammar):
         # exgrammar 指的是编码后的拓广文法
         self.grammar = grammar
-        self.exgrammar = list()
-        self.content = dict()
+        self.exgrammar = []
+        self.content = []
 
     def insertIndexList(self, index, non_terminator, expression):
-        self.exgrammar.append(tuple(index, non_terminator, expression))
+        self.exgrammar.append((index, non_terminator, expression))
 
     def insertSpecFamilyItem(self, specFamilyItem):
         self.content.append(specFamilyItem)
+
+    def extendedGrammar(self):
+        """
+        将传入的文法进行匹配扩充
+        """
+        index = 0
+        for lp, rp_tuple in self.grammar.items():
+            for rp in rp_tuple:
+                self.insertIndexList(index, lp, rp)
+                index += 1
+
+        for tup in self.exgrammar:
+            print(tup)
+
+
