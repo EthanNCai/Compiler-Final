@@ -2,10 +2,6 @@ from .AnalysisTable import AnalysisTable
 from pathlib import Path
 import json
 
-FILE = Path(__file__).resolve()
-ROOT = FILE.parents[1]  # root directory
-INPUT = ROOT / 'lexer' / 'temp'
-
 
 class Parser:
     def __init__(self, AnalysisTable, json_path, token_to_terminator_bb):
@@ -16,7 +12,7 @@ class Parser:
         self.symbol_stack = []
 
     def json_to_str(self, json_path):
-        with open(str(INPUT / json_path), 'r') as json_file:
+        with open(json_path, 'r') as json_file:
             data = json.load(json_file)
 
         input = ""

@@ -1,4 +1,4 @@
-from ExpressionFirstFinding import find_first
+from parser.ExpressionFirstFinding import find_first
 
 """
 SpecFamilyItem 的结构例子
@@ -76,7 +76,6 @@ class SpecFamily:
         self.non_terminator_in = non_terminator
         self.exgrammar = []
         self.content = []
-        self.item_first_production_list = []
         self.item_first_production_dict_list = []
         self.computeSpecFamily()
 
@@ -237,3 +236,4 @@ class SpecFamily:
                 self.closureItem(sfi)
                 self.getTransform(sfi)
                 self.insertSpecFamilyItem(sfi)
+

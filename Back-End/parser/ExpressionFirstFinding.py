@@ -1,4 +1,4 @@
-from Grammar import GRAMMAR_WITH_EPSILON
+from parser.Grammar import GRAMMAR_WITH_EPSILON
 
 """
 NON_TERMINATOR = ['E', 'E_', 'T', 'T_', 'F']
@@ -46,10 +46,11 @@ def recursive_first_finding(current_non_terminator, non_terminator_in, grammar_i
 def is_this_non_terminator_nullable(target_non_terminator, non_terminator_in, grammar_in):
     # decisions = GRAMMAR.get(target_non_terminator)
     decisions = GRAMMAR_WITH_EPSILON.get(target_non_terminator)
-    for decision in decisions:
-        first_sym = decision[0]
-        if first_sym == 'ε':
-            return True
+    if decisions:
+        for decision in decisions:
+            first_sym = decision[0]
+            if first_sym == 'ε':
+                return True
     return False
 
 

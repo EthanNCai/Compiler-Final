@@ -1,9 +1,5 @@
 from pathlib import Path
 import json
-FILE = Path(__file__).resolve()
-ROOT = FILE.parents[0]  # root directory
-INPUT = ROOT / 'input'
-OUTPUT = ROOT / 'temp'
 
 TOKEN_DICT = {
     "+": 3,
@@ -45,14 +41,15 @@ HINT_DICT = {
 }
 
 class Lexer:
-    def __init__(self, file):
+    def __init__(self, test_file_path, out_path):
         self.start_state = 'START'
         self.accept_state = 'ACCEPT'
+        self.out_path = out_path
         self.i = 0
         self.num = 0
         self.data = {}
         self.dfa = DFA(self.start_state, self.accept_state)
-        with open(str(INPUT/ file), "rb") as file:
+        with open(test_file_path, "rb") as file:
             self.input_string = file.read().decode("utf-8")
 
     def run(self):
@@ -73,7 +70,7 @@ class Lexer:
                     self.dfa.run(self.input_string[self.i-1])
                     self.dfa.conclude()
                     self.dfa.refresh()
-        with open(str(OUTPUT / 'output.json'), 'w') as file:
+        with open(self.out_path, 'w') as file:
             json.dump(self.data, file) 
 
 class DFA:
