@@ -77,3 +77,12 @@ def token_to_terminator_bb(token):
         return 'b'
 
     print('ERROR!')
+
+
+def token_to_terminator_pl0(token):
+    if token == 22:
+        return 'a'
+    if token == 21:
+        return 'b'
+
+    print('ERROR!')
