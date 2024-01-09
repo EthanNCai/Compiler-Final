@@ -1,5 +1,5 @@
-from Grammar import NON_TERMINATOR, TERMINATOR
-from ExpressionFirstFinding import find_first
+
+from .ExpressionFirstFinding import  find_first
 
 """
 SpecFamilyItem 的结构例子
@@ -71,9 +71,10 @@ SpecFamily 的结构例子
 
 class SpecFamily:
 
-    def __init__(self, grammar):
+    def __init__(self, grammar, non_terminator):
         # exgrammar 指的是编码后的拓广文法
         self.grammar = grammar
+        self.non_terminator_in = non_terminator
         self.exgrammar = []
         self.content = []
         self.item_first_production_list = []
@@ -145,7 +146,7 @@ class SpecFamily:
             if caret_index < len(production) - 1:
                 # 确保 '^' 不是最后一个元素
                 symbol = production[caret_index + 1]  # 取^符号后面的操作符
-                if symbol in NON_TERMINATOR:
+                if symbol in self.non_terminator_in:
                     # 是非终结符
                     for grammar in self.exgrammar:
                         # 对所有的文法，碰到以该符号开头的文法，则加入到项目集
@@ -161,7 +162,7 @@ class SpecFamily:
                             if caret_index + 1 < len(production) - 1:
                                 # 如果求闭包的产生式的'^'后面的元素不是最后一个元素
                                 # print(*fir_sym)
-                                fir_sym_set = find_first([production[-1], *fir_sym])
+                                fir_sym_set = find_first([production[-1], *fir_sym], self.non_terminator_in, self.grammar)
                             else:
                                 # 如果 ^ 后面的元素是最后一个
                                 fir_sym_set = fir_sym

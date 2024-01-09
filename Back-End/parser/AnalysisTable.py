@@ -1,4 +1,4 @@
-from Grammar import NON_TERMINATOR, TERMINATOR
+
 import copy
 import pandas as pd
 
@@ -65,8 +65,10 @@ import pandas as pd
 
 class AnalysisTable:
 
-    def __init__(self, specFamily):
-        self.specFamily = specFamily
+    def __init__(self, spec_family, terminator_, non_terminator_):
+        self.specFamily = spec_family
+        self.non_terminator_in = non_terminator_
+        self.terminator_in = terminator_
         self.action = dict()
         self.goto = dict()
         self.isLR1 = True
@@ -78,7 +80,7 @@ class AnalysisTable:
             state_index = specFamilyItem.state
             state_transform = specFamilyItem.transfrom
             for input, destination in state_transform.items():
-                if input in NON_TERMINATOR:
+                if input in self.non_terminator_in:
                     # 填入数字
                     if input not in self.goto:
                         self.goto[input] = dict()
@@ -98,7 +100,7 @@ class AnalysisTable:
             state_transform = specFamilyItem.transfrom
             exGrammar = self.specFamily.exgrammar
             # 加入reduction
-            for non_terminator, expression, forward_syms in state_content:
+            for non_terminator_in_state_content, expression, forward_syms in state_content:
                 if expression[-1] == "^":
 
                     # 找到这个项目
@@ -108,7 +110,7 @@ class AnalysisTable:
                     if not exp_to_match:
                         exp_to_match = ['ε']
                     for exp_a_index, exp_non_terminator, exp_a in exGrammar:
-                        if exp_a == exp_to_match and non_terminator == exp_non_terminator:
+                        if exp_a == exp_to_match and non_terminator_in_state_content == exp_non_terminator:
                             exGrammarIndex = exp_a_index
                             break
                     if exGrammarIndex == -1:
@@ -127,7 +129,7 @@ class AnalysisTable:
 
             # 加入shift
             for input, destination in state_transform.items():
-                if input in TERMINATOR:
+                if input in self.terminator_in:
                     if state_index not in self.action:
                         self.action[state_index] = dict()
                     # 检查这一格是否已经有项目了（说明冲突）
@@ -140,9 +142,9 @@ class AnalysisTable:
     def to_excel(self, path):
         df = pd.DataFrame()
         for state, terminator_dict in self.action.items():
-            for terminator, action in terminator_dict.items():
-                df.loc[str(state), str(terminator)] = action
-        for non_terminator, state_dict in self.goto.items():
+            for terminator_in_dict, action in terminator_dict.items():
+                df.loc[str(state), str(terminator_in_dict)] = action
+        for non_terminator_in_dict, state_dict in self.goto.items():
             for state, goto in state_dict.items():
-                df.loc[str(state), str(non_terminator)] = goto
+                df.loc[str(state), str(non_terminator_in_dict)] = goto
         df.to_excel(path, index=True)
