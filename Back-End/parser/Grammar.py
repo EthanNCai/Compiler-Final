@@ -49,3 +49,12 @@ PL0_GRAMMAR = {
     'WRITE': (['WRITE_BEGIN', ')'],),
     'WRITE_BEGIN': (['write', '(', 'ID'], ['WRITE_BEGIN', ',', 'ID']),
 }
+
+
+def token_to_terminator_bb(token):
+    if token == 22:
+        return 'a'
+    if token == 21:
+        return 'b'
+
+    print('ERROR!')
