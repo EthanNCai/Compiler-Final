@@ -63,8 +63,6 @@ lexer.run()
 语法分析器
 """
 
-# analysis_table = AnalysisTable(spec_family)
-
 # analysisstack = AnalysisStack(analysis_table, json_path)
 
 # analysisstack.analyse()

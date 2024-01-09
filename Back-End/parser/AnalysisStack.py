@@ -9,7 +9,7 @@ INPUT = ROOT / 'lexer' / 'temp'
 class AnalysisStack:
     def __init__(self, AnalysisTable, lexer):
         self.analysetable = AnalysisTable
-        self.input = lexer
+        self.input = self.json_to_str(lexer)
         self.state_stack = [0]
         self.symbol_stack = []
 
@@ -21,7 +21,7 @@ class AnalysisStack:
 
         for _, value in data.items():
             input += token_to_terminator_bb(value[0])
-            
+
         return input
 
     def analyse(self):
