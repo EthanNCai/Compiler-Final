@@ -63,6 +63,7 @@ def is_this_non_terminator_nullable(target_non_terminator, g_pack):
 
 
 def find_first(expression_in, non_terminator_in_, grammar_in_, terminator_in_):
+    first.clear()
     expression = copy.deepcopy(expression_in)
     non_terminator_in = copy.deepcopy(non_terminator_in_)
     grammar_in = copy.deepcopy(grammar_in_)
@@ -92,7 +93,10 @@ def find_first(expression_in, non_terminator_in_, grammar_in_, terminator_in_):
 
 
 def generate_nullable_list(g_pack):
-    non_terminator_in, grammar_in, terminator_in = g_pack
+    non_terminator_in_, grammar_in_, terminator_in_ = g_pack
+    non_terminator_in = copy.deepcopy(non_terminator_in_)
+    grammar_in = copy.deepcopy(grammar_in_)
+    terminator_in = copy.deepcopy(terminator_in_)
     for non_terminator in non_terminator_in:
         input = [non_terminator, ]
         if 'ε' in _find_first(input, non_terminator_in, grammar_in, terminator_in):
