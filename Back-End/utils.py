@@ -63,8 +63,11 @@ def is_this_non_terminator_nullable(target_non_terminator, g_pack):
         return False
 
 
-def find_first(expression_in, non_terminator_in, grammar_in, terminator_in):
+def find_first(expression_in, non_terminator_in_, grammar_in_, terminator_in_):
     expression = copy.deepcopy(expression_in)
+    non_terminator_in = copy.deepcopy(non_terminator_in_)
+    grammar_in = copy.deepcopy(grammar_in_)
+    terminator_in = copy.deepcopy(terminator_in_)
     g_pack = (non_terminator_in, grammar_in, terminator_in)
     generate_nullable_list(g_pack)
     first_sym = expression[0]
@@ -85,6 +88,7 @@ def find_first(expression_in, non_terminator_in, grammar_in, terminator_in):
                 first.add(next_first_sym)
             else:
                 recursive_first_finding(next_first_sym, g_pack)
+
     return first
 
 
@@ -168,8 +172,7 @@ if __name__ == '__main__':
 
     for non_terminator in NON_TERMINATOR_LIST:
         first_all[non_terminator] = find_first([non_terminator], NON_TERMINATOR_LIST, GRAMMAR_WITH_EPSILON, TERMINATORS_LIST)
-    
-    print(GRAMMAR_WITH_EPSILON)
+
     print(first_all)
 
     find_follow('S_')
