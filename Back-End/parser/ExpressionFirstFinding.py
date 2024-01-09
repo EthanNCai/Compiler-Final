@@ -1,7 +1,6 @@
 import copy
 from parser.ReturnNullableList import _find_first
 
-
 """
 NON_TERMINATOR = ['E', 'E_', 'T', 'T_', 'F']
 TERMINATOR = ['+', '*', '(', ')', 'id']
@@ -96,4 +95,3 @@ def generate_nullable_list(g_pack):
         input = [non_terminator, ]
         if 'ε' in _find_first(input, non_terminator_in, grammar_in, terminator_in):
             nullable_non_terminator.update(input)
-

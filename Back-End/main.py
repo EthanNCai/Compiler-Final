@@ -43,6 +43,13 @@ JSON = ROOT / 'lexer' / 'temp'
 """
 
 spec_family = SpecFamily(GRAMMAR_WITH_EPSILON, NON_TERMINATOR, TERMINATOR)
+for each_list in spec_family.content:
+    print('The grammar:')
+    for content in each_list.content:
+        print(content)
+    print('State: ', each_list.state)
+    print('Transform: ', each_list.transfrom)
+    print('----------------------------')
 
 """
 构建分析表
@@ -55,7 +62,7 @@ analysis_table.to_excel('output.xlsx')
 词法分析器分析
 """
 
-json_path = str(JSON/ 'output.json')
+json_path = str(JSON / 'output.json')
 test_path = str(TEST)
 
 lexer = Lexer(test_path, json_path)
