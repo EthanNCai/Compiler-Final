@@ -49,6 +49,7 @@ spec_family = SpecFamily(PM_GRAMMAR, PM_NON_TERMINATOR, PM_TERMINATOR)
 """
 
 analysis_table = AnalysisTable(spec_family, PM_TERMINATOR, PM_NON_TERMINATOR)
+print(analysis_table.isLR1)
 analysis_table.to_excel('output.xlsx')
 
 """
