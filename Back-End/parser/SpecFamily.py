@@ -161,8 +161,8 @@ class SpecFamily:
                             if caret_index + 1 < len(production) - 1:
                                 # 如果求闭包的产生式的'^'后面的元素不是最后一个元素
                                 # print(*fir_sym)
-                                fir_sym_set = find_first([production[-1], *fir_sym], self.non_terminator_in,
-                                                         self.grammar, self.terminator_in)
+                                fir_sym_set = list(find_first([production[-1], *fir_sym], self.non_terminator_in,
+                                                              self.grammar, self.terminator_in))
 
                             else:
                                 # 如果 ^ 后面的元素是最后一个
