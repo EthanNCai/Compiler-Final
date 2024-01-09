@@ -1,4 +1,10 @@
 from AnalysisTable import AnalysisTable
+from pathlib import Path
+from Grammar import token_to_terminator_bb
+import json
+FILE = Path(__file__).resolve()
+ROOT = FILE.parents[1]  # root directory
+INPUT = ROOT / 'lexer' / 'temp'
 
 class AnalysisStack:
     def __init__(self, AnalysisTable, lexer):
@@ -6,7 +12,17 @@ class AnalysisStack:
         self.input = lexer
         self.state_stack = [0]
         self.symbol_stack = []
-    
+
+    def json_to_str(self, lexer):
+        with open(str(INPUT / lexer), 'r') as json_file:
+            data = json.load(json_file)
+
+        input = ""
+
+        for _, value in data.items():
+            input += token_to_terminator_bb(value[0])
+            
+        return input
 
     def analyse(self):
         action_table = self.analysetable.action
