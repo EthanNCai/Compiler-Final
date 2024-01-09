@@ -89,7 +89,7 @@ def find_index(target, _list):
 
 def closure(grammar):
     sf = SpecFamily(grammar)
-    sf.computeSpecFamilyItem()
+    sf.computeSpecFamily()
     for each_list in sf.content:
         print('The grammar:')
         for content in each_list.content:

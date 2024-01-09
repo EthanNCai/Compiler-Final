@@ -1,18 +1,6 @@
 from Grammar import NON_TERMINATOR, TERMINATOR
 from ExpressionFirstFinding import find_first
 
-
-def move_caret(right_production) -> list:
-    caret_index = right_production.index('^')
-
-    # 后移'^'
-    if caret_index < len(right_production) - 1:  # 确保'^'不是最后一个元素
-        right_production[caret_index], right_production[caret_index + 1] = right_production[caret_index + 1], \
-            right_production[caret_index]
-
-    return right_production
-
-
 """
 SpecFamilyItem 的结构例子
 {
@@ -47,7 +35,7 @@ class SpecFamilyItem:
 
     def isInItem(self, non_terminator, expression, forward_sym):
         """
-        在项目集规范族中判断是否已经存在一个类似的产生式。
+        判断是否当前产生式是否在当前项目集。
         """
         for existing_symbol, existing_production, existing_fir_set in self.content:
             if existing_symbol == non_terminator and existing_production == expression and existing_fir_set == forward_sym:
@@ -115,6 +103,21 @@ class SpecFamily:
 
         return new_state
 
+    def move_caret(self, right_production) -> list:
+        """
+        移位函数，负责将点 ‘^’ 符号往后移动一位
+        :param right_production: 表达式
+        :return: 移动以后的表达式
+        """
+        caret_index = right_production.index('^')
+
+        # 后移'^'
+        if caret_index < len(right_production) - 1:  # 确保'^'不是最后一个元素
+            right_production[caret_index], right_production[caret_index + 1] = right_production[caret_index + 1], \
+                right_production[caret_index]
+
+        return right_production
+
     def extendedGrammar(self):
         """
         将传入的文法进行匹配扩充: 扩广文法
@@ -126,6 +129,10 @@ class SpecFamily:
                 index += 1
 
     def closureItem(self, specFamilyItem):
+        """
+        计算单个项目集的闭包
+        :param specFamilyItem: 传入一个项目集，注意是单个项目集
+        """
         for each_grammar in specFamilyItem.content:
             # 遍历单个项目集中的每一个产生式
             production = each_grammar[1]  # 产生式右部
@@ -140,6 +147,9 @@ class SpecFamily:
                         # 对所有的文法，碰到以该符号开头的文法，则加入到项目集
                         if symbol == grammar[1]:
                             right_production = grammar[2].copy()
+                            # if right_production == 'ε':
+                            #     # 空集特别考虑
+                            #
                             right_production.insert(0, '^')
                             if caret_index + 1 < len(production) - 1:
                                 # 如果求闭包的产生式的'^'后面的元素不是最后一个元素
@@ -148,7 +158,7 @@ class SpecFamily:
                                 # 如果 ^ 后面的元素是最后一个
                                 fir_sym_set = fir_sym
                             if specFamilyItem.isInItem(symbol, right_production, fir_sym_set) == False:
-                                # 不在当前项目集规范组，则添加
+                                # 不在当前项目集，则添加
                                 specFamilyItem.insertContent(symbol, right_production, list(fir_sym_set))
                             else:
                                 # 存在当前项目集规范组
@@ -160,7 +170,10 @@ class SpecFamily:
                 # 如果是最后一个元素，则不用求闭包，直接pass
                 pass
 
-    def getTransform(self, specFamilyItem, status):
+    def getTransform(self, specFamilyItem):
+        """
+        计算当前状态集的转换状态集及接受字符
+        """
         for each_production in specFamilyItem.content:
             non_terminator = each_production[0]
             production = each_production[1].copy()
@@ -169,7 +182,7 @@ class SpecFamily:
             if caret_index + 1 <= len(production) - 1:
                 # ^ 不在产生式末尾
                 receive_operator = production[caret_index + 1]
-                production_move = move_caret(production)
+                production_move = self.move_caret(production)
                 sate = self.isInItemFirstProduction(non_terminator, production_move, fir_set)
                 if sate == False:
                     # 不在项目集的首部
@@ -185,8 +198,10 @@ class SpecFamily:
 
         ...
 
-    def computeSpecFamilyItem(self):
-        # 计算项目集规范族
+    def computeSpecFamily(self):
+        """
+        计算项目集规范族, 计算后的结果将保存在content中
+        """
         self.extendedGrammar()
 
         first_grammar = self.exgrammar[0]
@@ -201,12 +216,8 @@ class SpecFamily:
             production = each_first_production[1]
             forward_sym = each_first_production[2]
             state = each_first_production[3]
-
-            if state == 2:
-                print('breakpoint')
-
             sfi = SpecFamilyItem(state)
             sfi.insertContent(non_terminator=non_terminator, expression=production, forward_sym=forward_sym)
             self.closureItem(sfi)
-            self.getTransform(sfi, state)
+            self.getTransform(sfi)
             self.insertSpecFamilyItem(sfi)
