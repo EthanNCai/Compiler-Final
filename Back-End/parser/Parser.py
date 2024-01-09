@@ -1,15 +1,17 @@
-from .AnalysisTable import AnalysisTable
-from pathlib import Path
+from utils import find_first, find_follow
 import json
 
-
 class Parser:
-    def __init__(self, AnalysisTable, json_path, token_to_terminator_bb):
+    def __init__(self, AnalysisTable, json_path, token_to_terminator_bb, terminator_, non_terminator_):
         self.token_to_terminator_bb = token_to_terminator_bb
         self.analysetable = AnalysisTable
         self.input = self.json_to_str(json_path)
+        self.non_terminator_in = non_terminator_
+        self.terminator_in = terminator_
         self.state_stack = [0]
         self.symbol_stack = []
+        self.first = {non_term: set() for non_term in non_terminator_}
+        self.follow = {non_term: set() for non_term in non_terminator_} 
 
     def json_to_str(self, json_path):
         with open(json_path, 'r') as json_file:
@@ -22,7 +24,12 @@ class Parser:
 
         return input
 
-    def analyse(self):
+    def compute_fir_fol(self):
+        for non_terminator in self.non_terminator_in:
+            find_first(non_terminator, non_terminator)
+        find_follow(self.non_terminator_in[0])
+
+    def analyse(self, recovery):
         action_table = self.analysetable.action
         goto_table = self.analysetable.goto
         input_buffer = list(self.input) + ['$']
@@ -44,7 +51,7 @@ class Parser:
                     action_str = str(action)
 
                     print("{:<20} {:<20} {:<20} {:<20}".format(state_stack_str, symbol_stack_str, input_buffer_str,
-                                                               action_str))
+                                                            action_str))
 
                     if action[0] == 'S':
                         # 移入操作，将状态和符号入栈
@@ -71,8 +78,24 @@ class Parser:
                         print("Input Accepted!")
                         break
                 else:
-                    print("Error: Invalid Input")
-                    break
+                    print("Error: Invalid Input. Attempting error recovery.")
+
+                    # 错误恢复：从栈顶开始回退，直到找到状态 s，该状态具有预先确定的非终结符 A 的转移
+                    while len(self.state_stack) > 0:
+                        top_state = self.state_stack.pop()
+                        if goto_table.get(recovery).get(top_state) is not None:
+                            break
+
+                    # 丢弃输入符号，直至找到符号 a，它可以合法地跟随 A
+                    while len(input_buffer) > 0 and input_buffer[0] not in self.follow.get(recovery):
+                        input_buffer.pop(0)
+                    
+                    # 恢复正常分析：将 A 和 goto[s, A] 推入栈中
+                    self.symbol_stack.append(recovery)
+                    new_state = goto_table.get(recovery).get(top_state)
+                    self.state_stack.append(int(new_state))
             else:
                 print("Error: Invalid Input")
                 break
+
+

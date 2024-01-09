@@ -1,7 +1,7 @@
 """
 这是伪代码！这不是真的代码，仅供参考！
 """
-from parser.Grammar import token_to_terminator_bb, GRAMMAR_WITH_EPSILON, NON_TERMINATOR, TERMINATOR, GRAMMAR
+from parser.Grammar import token_to_terminator_bb, NON_TERMINATOR, TERMINATOR, GRAMMAR
 from lexer.Lexer import Lexer
 from pathlib import Path
 from parser.Parser import Parser
@@ -65,5 +65,5 @@ lexer.run()
 语法分析器
 """
 
-analysis_stack = Parser(analysis_table, json_path, token_to_terminator_bb)
-analysis_stack.analyse()
+analysis_stack = Parser(analysis_table, json_path, token_to_terminator_bb, TERMINATOR, NON_TERMINATOR)
+analysis_stack.analyse("B")

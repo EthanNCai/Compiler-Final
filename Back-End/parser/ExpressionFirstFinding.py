@@ -1,5 +1,3 @@
-from .Grammar import GRAMMAR_WITH_EPSILON
-
 """
 NON_TERMINATOR = ['E', 'E_', 'T', 'T_', 'F']
 TERMINATOR = ['+', '*', '(', ')', 'id']

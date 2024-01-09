@@ -1,6 +1,6 @@
 import itertools
-from SpecFamily import SpecFamily
-from Grammar import GRAMMAR, GRAMMAR_WITH_EPSILON, PL0_GRAMMAR
+from parser.SpecFamily import SpecFamily
+from parser.Grammar import GRAMMAR, GRAMMAR_WITH_EPSILON, PL0_GRAMMAR
 
 """
 G[S_]:
@@ -8,10 +8,6 @@ G[S_]:
         S  → BB
         B  → bB|a
 """
-
-NON_TERMINATOR_LIST = ['S_', 'S', 'B']
-TERMINATORS_LIST = ['a', 'b']
-
 first = {
     'S': set(),
     'S_': set(),
@@ -24,18 +20,22 @@ follow = {
     'B': set()
 }
 
+NON_TERMINATOR_LIST = ['S_', 'S', 'B']
+TERMINATORS_LIST = ['a', 'b']
+
 non_terminator_counts = len(NON_TERMINATOR_LIST)
 nullable_non_terminator = []
-
 
 def find_first(target_non_terminator, current_non_terminator):
     decisions = GRAMMAR.get(current_non_terminator)
     for decision in decisions:
+        decision = tuple(decision)
         first_sym = decision[0]
         if first_sym in NON_TERMINATOR_LIST:
             find_first(target_non_terminator, first_sym)
         else:
             first[target_non_terminator].add(first_sym)
+    
 
 
 def find_follow(begin_non_terminator):
@@ -44,6 +44,7 @@ def find_follow(begin_non_terminator):
     search_list = list(itertools.product(NON_TERMINATOR_LIST, NON_TERMINATOR_LIST))
 
     subset_relationships = set()
+
     for non_terminator_, non_terminator_to_search in search_list:
         decisions = GRAMMAR.get(non_terminator_to_search)
 
@@ -60,13 +61,12 @@ def find_follow(begin_non_terminator):
 
                 if backward_nullable(decision[i + 1:]):
                     subset_relationships.add((non_terminator_, non_terminator_to_search))
+
                 if i != len(decision) - 1:
                     next_symbol = decision[i + 1]
                     if next_symbol in TERMINATORS_LIST:
-
                         follow[non_terminator_].add(next_symbol)
                     elif next_symbol in NON_TERMINATOR_LIST:
-
                         follow[non_terminator_].update(first[next_symbol])
                         follow[non_terminator_].discard('ε')
 
@@ -101,4 +101,9 @@ def closure(grammar):
 if __name__ == '__main__':
     # GRAMMAR = GRAMMAR
     GRAMMAR = GRAMMAR_WITH_EPSILON
-    closure(GRAMMAR)
+    for non_terminator in NON_TERMINATOR_LIST:
+        find_first(non_terminator, non_terminator)
+    print(first)
+    find_follow('S_')
+    print(follow)
+    #closure(GRAMMAR)
