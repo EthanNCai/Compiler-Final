@@ -47,7 +47,7 @@ def recursive_first_finding(current_non_terminator, g_pack):
         elif first_sym in non_terminator_in and first_sym != current_non_terminator:
             recursive_first_finding(first_sym, g_pack)
             # 此非终结符是可能为空的
-            while is_this_non_terminator_nullable(decision[0], g_pack) :
+            while is_this_non_terminator_nullable(decision[0], g_pack) and len(decision) > 1:
                 decision.pop(0)
                 next_first_sym = decision[0]
                 if next_first_sym in terminator_in or next_first_sym in ['$', 'ε']:
@@ -83,7 +83,7 @@ def find_first(expression_in, non_terminator_in_, grammar_in_, terminator_in_):
 
         # 如果可以为空的话往后面找
 
-        while is_this_non_terminator_nullable(expression[0], g_pack):
+        while is_this_non_terminator_nullable(expression[0], g_pack) and len(expression) > 1:
             expression.pop(0)
             next_first_sym = expression[0]
             if next_first_sym in terminator_in or next_first_sym in ['$', 'ε']:
@@ -104,4 +104,3 @@ def generate_nullable_list(g_pack):
         if 'ε' in _find_first(input, non_terminator_in, grammar_in, terminator_in):
             nullable_non_terminator.update(input)
     print(nullable_non_terminator)
-
