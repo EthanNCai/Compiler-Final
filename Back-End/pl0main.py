@@ -41,7 +41,7 @@ TEST = ROOT / 'test.txt'
 构建项目集规范族
 """
 print('构建项目集规范族')
-spec_family = SpecFamily(PL0_GRAMMAR, PL0_NON_TERMINATOR)
+spec_family = SpecFamily(PL0_GRAMMAR, PL0_NON_TERMINATOR, PL0_TERMINATOR)
 
 """
 构建分析表
