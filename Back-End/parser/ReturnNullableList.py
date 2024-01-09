@@ -29,6 +29,7 @@ find_first(['T_', 'F', 'T_'])
 
 first = set()
 
+
 def recursive_first_finding(current_non_terminator, g_pack):
     non_terminator_in, grammar_in, terminator_in = g_pack
     decisions = grammar_in.get(current_non_terminator)
