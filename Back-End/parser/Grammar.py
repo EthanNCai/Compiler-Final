@@ -67,8 +67,8 @@ PL0_TERMINATOR_NEW = [
     'while', 'do', 'read', '(', ')', 'write', '^'
 ]
 PL0_GRAMMAR = {
-    'PROG_': (['PROG'],),
-    'PROG': (['SUBPROG', '.'],),  #
+    'PROG_': (['PROG', '.'],),
+    'PROG': (['SUBPROG'],),  #
     'SUBPROG': (['CONST', 'VARIABLE', 'PROCEDURE', 'M_STATEMENT', 'STATEMENT'],),  #
     'M_STATEMENT': (['ε'],),  #
     'CONST': (['CONST_', ';'], ['ε']),  #
