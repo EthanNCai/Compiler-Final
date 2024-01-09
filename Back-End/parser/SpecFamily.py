@@ -71,10 +71,11 @@ SpecFamily 的结构例子
 
 class SpecFamily:
 
-    def __init__(self, grammar, non_terminator):
+    def __init__(self, grammar, non_terminator, terminator):
         # exgrammar 指的是编码后的拓广文法
         self.grammar = grammar
         self.non_terminator_in = non_terminator
+        self.terminator_in = terminator
         self.exgrammar = []
         self.content = []
         self.item_first_production_list = []
@@ -162,7 +163,7 @@ class SpecFamily:
                             if caret_index + 1 < len(production) - 1:
                                 # 如果求闭包的产生式的'^'后面的元素不是最后一个元素
                                 # print(*fir_sym)
-                                fir_sym_set = find_first([production[-1], *fir_sym], self.non_terminator_in, self.grammar)
+                                fir_sym_set = find_first([production[-1], *fir_sym], self.non_terminator_in, self.grammar, self.terminator_in)
                             else:
                                 # 如果 ^ 后面的元素是最后一个
                                 fir_sym_set = fir_sym
