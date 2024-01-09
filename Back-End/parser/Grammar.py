@@ -1,6 +1,5 @@
 NON_TERMINATOR = ['S_', 'S', 'B']
 TERMINATOR = ['a', 'b']
-
 GRAMMAR = {
     'S_': (['S'],),
     'S': (['B', 'B'],),
@@ -10,10 +9,21 @@ GRAMMAR = {
 # 警告对于'S_': (['S'],), 其 ] 后面的 , 是不可省略的!
 # 警告对于'S_': (['S'],), 其 ']' 后面的 ',' 是不可省略的!
 
+
+"""
+NON_TERMINATOR = ['E', 'T', 'F']
+TERMINATOR = ['+','*','(',')','id']
+
+GRAMMAR = {
+    'E':(['E','+','T'],['T']),
+    'T':(['T','*','F'],['F']),
+    'F':(['(','E',')'],['id'])
+}
+"""
+
+
 PL0_NON_TERMINATOR = []
 PL0_TERMINATOR = []
-
-
 PL0_GRAMMAR = {
     'PROG': (['SUBPROG', '.'],),
     'SUBPROG': (['CONST', 'VARIABLE', 'PROCEDURE', 'M_STATEMENT', 'STATEMENT'],),
@@ -58,3 +68,5 @@ def token_to_terminator_bb(token):
         return 'b'
 
     print('ERROR!')
+
+

@@ -135,14 +135,11 @@ class AnalysisTable:
         ...
 
     def to_excel(self, path):
-
         df = pd.DataFrame()
-
         for state, terminator_dict in self.action.items():
             for terminator, action in terminator_dict.items():
                 df.loc[str(state), str(terminator)] = action
         for non_terminator, state_dict in self.goto.items():
             for state, goto in state_dict.items():
                 df.loc[str(state), str(non_terminator)] = goto
-
         df.to_excel(path, index=True)
