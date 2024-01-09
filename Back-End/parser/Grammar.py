@@ -12,6 +12,14 @@ GRAMMAR_WITH_EPSILON = {
     'B': (['b', 'B'], ['a'], ['b', 'S'], ['ε'],),
 }
 
+PM_GRAMMAR = {
+    'E': (['E', '+', 'T'], ['T']),
+    'T': (['T', '*', 'F'], ['F']),
+    'F': (['(', 'E', ')'], ['id'])
+}
+PM_NON_TERMINATOR = ['E', 'T', 'F']
+PM_TERMINATOR = ['+', '*', '(', ')', 'id']
+
 # 警告对于'S_': (['S'],), 其 ] 后面的 , 是不可省略的!
 # 警告对于'S_': (['S'],), 其 ']' 后面的 ',' 是不可省略的!
 
@@ -45,14 +53,15 @@ PL0_NON_TERMINATOR = ['PROG', 'SUBPROG', 'M_STATEMENT', 'CONST', 'CONST_', 'CONS
 PL0_TERMINATOR = [';', ',', 'const', '=', 'num', 'var', 'id', ':=', 'end', 'begin', 'if', 'then', 'odd', '(', ')', '+',
                   '-', '*', '/', '=', '#', '<', '<=', '>', '>=', 'call', 'while', 'do', 'read', 'write']
 PL0_GRAMMAR = {
-    'PROG': (['SUBPROG'],),
-    'SUBPROG': (['CONST', 'VARIABLE', 'PROCEDURE', 'M_STATEMENT', 'STATEMENT'],),
-    'M_STATEMENT': (['ε'],),
-    'CONST': (['CONST_', ';'], ['ε']),
+    'PROG': (['SUBPROG'],),  #
+    'SUBPROG': (['CONST', 'VARIABLE', 'PROCEDURE', 'M_STATEMENT', 'STATEMENT'],), #
+    'M_STATEMENT': (['ε'],), #
+    'CONST': (['CONST_', ';'], ['ε']), #
     'CONST_': (['CONST_', ',', 'CONST_DEF'], ['const', 'CONST_DEF']),
     'CONST_DEF': (['ID', '=', 'UINT'],),
     'UINT': (['num'],),
-    'VARIABLE': (['VARIABLE_', ';'], ['ε'], ['var', 'ID'], ['VARIABLE_', ',', 'ID']),
+    'VARIABLE': (['VARIABLE_', ';'], ['ε']),
+    'VARIABLE_': (['var', 'ID'], ['VARIABLE_', ',', 'ID']),
     'ID': (['id'],),
     'PROCEDURE': (['PROCEDURE_'], ['ε']),
     'PROCEDURE_': (['PROCEDURE_', 'PROC_HEAD', 'SUBPROG', ';'], ['PROC_HEAD', 'SUBPROG', ';']),

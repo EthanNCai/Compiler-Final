@@ -1,4 +1,6 @@
 import itertools
+import copy
+from parser.ReturnNullableList import _find_first
 from parser.SpecFamily import SpecFamily
 from parser.Grammar import GRAMMAR, GRAMMAR_WITH_EPSILON, PL0_GRAMMAR
 
@@ -8,37 +10,80 @@ G[S_]:
         S  → BB
         B  → bB|a
 """
-first = {
-    'S': set(),
-    'S_': set(),
-    'B': set()
-}
-
-follow = {
-    'S': set(),
-    'S_': set(),
-    'B': set()
-}
 
 NON_TERMINATOR_LIST = ['S_', 'S', 'B']
 TERMINATORS_LIST = ['a', 'b']
 
 non_terminator_counts = len(NON_TERMINATOR_LIST)
-nullable_non_terminator = []
 
-def find_first(target_non_terminator, current_non_terminator):
-    decisions = GRAMMAR.get(current_non_terminator)
+nullable_non_terminator = set()
+
+def recursive_first_finding(current_non_terminator, g_pack, first):
+    non_terminator_in, grammar_in, terminator_in = g_pack
+
+    decisions = grammar_in.get(current_non_terminator)
+
+    if not decisions:
+        print(current_non_terminator)
     for decision in decisions:
-        decision = tuple(decision)
+        # 常规操作
         first_sym = decision[0]
-        if first_sym in NON_TERMINATOR_LIST:
-            find_first(target_non_terminator, first_sym)
-        else:
-            first[target_non_terminator].add(first_sym)
+        if first_sym in terminator_in or first_sym in ['$', 'ε']:
+            first.add(first_sym)
+        elif first_sym in non_terminator_in and first_sym != current_non_terminator:
+            recursive_first_finding(first_sym, g_pack)
+            # 此非终结符是可能为空的
+            if is_this_non_terminator_nullable(first_sym, g_pack) and len(decision) > 1:
+                decision.pop(0)
+                next_first_sym = decision[0]
+                if next_first_sym in terminator_in or next_first_sym in ['$', 'ε']:
+                    first.add(next_first_sym)
+                else:
+                    recursive_first_finding(next_first_sym, g_pack)
+
+
+def is_this_non_terminator_nullable(target_non_terminator, g_pack):
+    if target_non_terminator in nullable_non_terminator:
+        return True
+    else:
+        return False
+
+
+def find_first(expression_in, non_terminator_in, grammar_in, terminator_in):
+    first = set()
+    expression = copy.deepcopy(expression_in)
+    g_pack = (non_terminator_in, grammar_in, terminator_in)
+    generate_nullable_list(g_pack)
+    first_sym = expression[0]
+
+    # 终结符或者是 Dollar
+    if first_sym in terminator_in or first_sym in ['$', 'ε']:
+        first.add(first_sym)
+    # 非终结符
+    elif first_sym in non_terminator_in:
+        # 加入First
+        recursive_first_finding(first_sym, g_pack, first)
+
+        # 如果可以为空的话往后面找
+        if is_this_non_terminator_nullable(first_sym, g_pack) and len(expression) > 1:
+            expression.pop(0)
+            next_first_sym = expression[0]
+            if next_first_sym in terminator_in or next_first_sym in ['$', 'ε']:
+                first.add(next_first_sym)
+            else:
+                recursive_first_finding(next_first_sym, g_pack, first)
+    return first
+
+
+def generate_nullable_list(g_pack):
+    non_terminator_in, grammar_in, terminator_in = g_pack
+    for non_terminator in non_terminator_in:
+        input = [non_terminator, ]
+        if 'ε' in _find_first(input, non_terminator_in, grammar_in, terminator_in):
+            nullable_non_terminator.update(input)
+
     
-
-
-def find_follow(begin_non_terminator):
+def find_follow(begin_non_terminator, follow, first):
     follow[begin_non_terminator].add('$')
 
     search_list = list(itertools.product(NON_TERMINATOR_LIST, NON_TERMINATOR_LIST))
@@ -99,11 +144,23 @@ def closure(grammar):
 
 
 if __name__ == '__main__':
+    first_all = {
+    'S': set(),
+    'S_': set(),
+    'B': set()
+    }
+
+
+    follow = {
+        'S': set(),
+        'S_': set(),
+        'B': set()
+    }
     # GRAMMAR = GRAMMAR
     GRAMMAR = GRAMMAR_WITH_EPSILON
     for non_terminator in NON_TERMINATOR_LIST:
-        find_first(non_terminator, non_terminator)
-    print(first)
-    find_follow('S_')
+        find_first([non_terminator], non_terminator)
+    print(first_all)
+    find_follow('S_', follow)
     print(follow)
     #closure(GRAMMAR)

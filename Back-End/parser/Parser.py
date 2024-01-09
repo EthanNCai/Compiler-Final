@@ -26,8 +26,8 @@ class Parser:
 
     def compute_fir_fol(self):
         for non_terminator in self.non_terminator_in:
-            find_first(non_terminator, non_terminator)
-        find_follow(self.non_terminator_in[0])
+            find_first(non_terminator, non_terminator, self.first)
+        find_follow(self.non_terminator_in[0], self.follow)
 
     def analyse(self, recovery):
         action_table = self.analysetable.action

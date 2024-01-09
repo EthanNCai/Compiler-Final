@@ -1,7 +1,7 @@
 """
 这是伪代码！这不是真的代码，仅供参考！
 """
-from parser.Grammar import token_to_terminator_bb, GRAMMAR_WITH_EPSILON, NON_TERMINATOR, TERMINATOR, GRAMMAR
+from parser.Grammar import token_to_terminator_bb, GRAMMAR_WITH_EPSILON, PM_NON_TERMINATOR, PM_TERMINATOR, PM_GRAMMAR
 from lexer.Lexer import Lexer
 from pathlib import Path
 from parser.Parser import Parser
@@ -26,14 +26,14 @@ JSON = ROOT / 'lexer' / 'temp'
             也就是，比如我想测试输入 bb 这个bb文法中的句子，那么，实际的测试记事本里应该写 var var
             比如我想测试输入 aa 这个bb文法中的句子，那么，实际的测试记事本里应该写 if if 
             比如我想测试输入 ab 这个bb文法中的句子，那么，实际的测试记事本里应该写 if var
-            
-            
+
+
 然后，现在考虑token流转非终结符流的翻译器的原理，实际上就是建立一个映射：
 
     假设translator是一个函数的话，有：
     对于上面那个例子运行 translator(22) 应该返回一个 a
     运行              translator(21) 应该返回一个 b 
-    
+
     这样你就可以把token流转换为非终结符流了（这个translator不能是一个字典，因为PL0中的变量
     名可以是多样的，比如说 nice 和 name 这种变量名都会映射到 ID 这个非终结符）
 """
@@ -42,28 +42,27 @@ JSON = ROOT / 'lexer' / 'temp'
 构建项目集规范族
 """
 
-spec_family = SpecFamily(GRAMMAR_WITH_EPSILON, NON_TERMINATOR, TERMINATOR)
+spec_family = SpecFamily(PM_GRAMMAR, PM_NON_TERMINATOR, PM_TERMINATOR)
 
 """
 构建分析表
 """
 
-analysis_table = AnalysisTable(spec_family, TERMINATOR, NON_TERMINATOR)
+analysis_table = AnalysisTable(spec_family, PM_TERMINATOR, PM_NON_TERMINATOR)
 analysis_table.to_excel('output.xlsx')
 
 """
 词法分析器分析
 """
 
-json_path = str(JSON/ 'output.json')
-test_path = str(TEST)
-
-lexer = Lexer(test_path, json_path)
-lexer.run()
+# json_path = str(JSON / 'output.json')
+# test_path = str(TEST)
+# lexer = Lexer(test_path, json_path)
+# lexer.run()
 
 """
 语法分析器
 """
 
-analysis_stack = Parser(analysis_table, json_path, token_to_terminator_bb, TERMINATOR, NON_TERMINATOR)
-analysis_stack.analyse("B")
+# analysis_stack = Parser(analysis_table, json_path, token_to_terminator_bb)
+# analysis_stack.analyse()
