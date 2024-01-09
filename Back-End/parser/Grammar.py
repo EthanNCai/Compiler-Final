@@ -27,10 +27,14 @@ GRAMMAR = {
 }
 """
 
-PL0_NON_TERMINATOR = []
-PL0_TERMINATOR = []
+PL0_NON_TERMINATOR = ['PROG', 'SUBPROG', 'M_STATEMENT', 'CONST', 'CONST_', 'CONST_DEF', 'UINT', 'VARIABLE', 'ID',
+                      'PROCEDURE', 'PROCEDURE_', 'PROC_HEAD', 'STATEMENT', 'ASSIGN', 'COMP', 'COMP_BEGIN', 'COND',
+                      'M_COND', 'CONDITION', 'EXPR', 'ITEM', 'FACTOR', 'PLUS_MINUS', 'MUL_DIV', 'REL', 'CALL', 'WHILE',
+                      'M_WHILE_FORE', 'M_WHILE_TAIL', 'READ', 'READ_BEGIN', 'WRITE', 'WRITE_BEGIN']
+PL0_TERMINATOR = [';', ',', 'const', '=', 'num', 'var', 'id', ':=', 'end', 'begin', 'if', 'then', 'odd', '(', ')', '+',
+                  '-', '*', '/', '=', '#', '<', '<=', '>', '>=', 'call', 'while', 'do', 'read', 'write']
 PL0_GRAMMAR = {
-    'PROG': (['SUBPROG', '.'],),
+    'PROG': (['SUBPROG'],),
     'SUBPROG': (['CONST', 'VARIABLE', 'PROCEDURE', 'M_STATEMENT', 'STATEMENT'],),
     'M_STATEMENT': (['ε'],),
     'CONST': (['CONST_', ';'], ['ε']),

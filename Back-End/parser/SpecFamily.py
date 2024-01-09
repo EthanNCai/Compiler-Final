@@ -210,7 +210,6 @@ class SpecFamily:
 
     def computeSpecFamily(self):
         self.extendedGrammar()
-
         first_grammar = self.exgrammar[0]
         right_production = first_grammar[2].copy()
         right_production.insert(0, '^')
