@@ -139,7 +139,12 @@ class SpecFamily:
         for symbol, production, lookahead in productions:
             key = (symbol, tuple(production))
             if key in merged_productions:
-                merged_productions[key] = (symbol, production, merged_productions[key][2] + lookahead)
+                existing_lookahead_set = set(merged_productions[key][2])
+                new_lookahead_set = set(lookahead)
+                if new_lookahead_set.issubset(existing_lookahead_set):
+                    merged_productions[key] = (
+                        symbol, production, list(existing_lookahead_set.union(new_lookahead_set)))
+
             else:
                 merged_productions[key] = (symbol, production, lookahead)
 
@@ -175,12 +180,16 @@ class SpecFamily:
                             if caret_index + 1 < len(production) - 1:
                                 # 如果求闭包的产生式的'^'后面的元素不是最后一个元素
                                 # print(*fir_sym)
-                                fir_sym_set = find_first([production[-1], *fir_sym], self.non_terminator_in,
+                                fir_sym_set = find_first([*production[caret_index + 2:], *fir_sym],
+                                                         self.non_terminator_in,
                                                          self.grammar, self.terminator_in)
+                                fir_sym_set.discard('ε')
                                 fir_sym_list = list(fir_sym_set)
                             else:
                                 # 如果 ^ 后面的元素是最后一个
                                 fir_sym_set = fir_sym
+                                if type(fir_sym_set) is set:
+                                    fir_sym_set.discard('ε')
                                 fir_sym_list = list(fir_sym_set)
                             if not specFamilyItem.isInItem(symbol, right_production, fir_sym_list):
                                 # 不在当前项目集，则添加

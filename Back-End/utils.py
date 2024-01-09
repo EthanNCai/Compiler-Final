@@ -3,6 +3,7 @@ import copy
 from parser.ReturnNullableList import _find_first
 from parser.SpecFamily import SpecFamily
 from parser.Grammar import GRAMMAR, GRAMMAR_WITH_EPSILON, PL0_GRAMMAR
+from parser.ExpressionFirstFinding import find_first
 
 """
 G[S_]:
@@ -18,7 +19,7 @@ non_terminator_counts = len(NON_TERMINATOR_LIST)
 
 nullable_non_terminator = set()
 
-first_all = {
+first = {
     'S': set(),
     'S_': set(),
     'B': set()
@@ -29,77 +30,6 @@ follow = {
     'S_': set(),
     'B': set()
 }
-
-first = set()
-
-def recursive_first_finding(current_non_terminator, g_pack):
-    non_terminator_in, grammar_in, terminator_in = g_pack
-
-    decisions = grammar_in.get(current_non_terminator)
-
-    if not decisions:
-        print(current_non_terminator)
-    for decision in decisions:
-        # 常规操作
-        first_sym = decision[0]
-        if first_sym in terminator_in or first_sym in ['$', 'ε']:
-            first.add(first_sym)
-        elif first_sym in non_terminator_in and first_sym != current_non_terminator:
-            recursive_first_finding(first_sym, g_pack)
-            # 此非终结符是可能为空的
-            if is_this_non_terminator_nullable(first_sym, g_pack) and len(decision) > 1:
-                decision.pop(0)
-                next_first_sym = decision[0]
-                if next_first_sym in terminator_in or next_first_sym in ['$', 'ε']:
-                    first.add(next_first_sym)
-                else:
-                    recursive_first_finding(next_first_sym, g_pack)
-
-
-def is_this_non_terminator_nullable(target_non_terminator, g_pack):
-    if target_non_terminator in nullable_non_terminator:
-        return True
-    else:
-        return False
-
-
-def find_first(expression_in, non_terminator_in_, grammar_in_, terminator_in_):
-    expression = copy.deepcopy(expression_in)
-    non_terminator_in = copy.deepcopy(non_terminator_in_)
-    grammar_in = copy.deepcopy(grammar_in_)
-    terminator_in = copy.deepcopy(terminator_in_)
-    g_pack = (non_terminator_in, grammar_in, terminator_in)
-    generate_nullable_list(g_pack)
-    first_sym = expression[0]
-
-    # 终结符或者是 Dollar
-    if first_sym in terminator_in or first_sym in ['$', 'ε']:
-        first.add(first_sym)
-    # 非终结符
-    elif first_sym in non_terminator_in:
-        # 加入First
-        recursive_first_finding(first_sym, g_pack)
-
-        # 如果可以为空的话往后面找
-        if is_this_non_terminator_nullable(first_sym, g_pack) and len(expression) > 1:
-            expression.pop(0)
-            next_first_sym = expression[0]
-            if next_first_sym in terminator_in or next_first_sym in ['$', 'ε']:
-                first.add(next_first_sym)
-            else:
-                recursive_first_finding(next_first_sym, g_pack)
-
-    return first
-
-
-def generate_nullable_list(g_pack):
-    non_terminator_in, grammar_in, terminator_in = g_pack
-    for non_terminator in non_terminator_in:
-        input = [non_terminator, ]
-        if 'ε' in _find_first(input, non_terminator_in, grammar_in, terminator_in):
-            nullable_non_terminator.update(input)
-    #print(nullable_non_terminator)
-
     
 def find_follow(begin_non_terminator):
     follow[begin_non_terminator].add('$')
@@ -133,7 +63,7 @@ def find_follow(begin_non_terminator):
                     if next_symbol in TERMINATORS_LIST:
                         follow[non_terminator_].add(next_symbol)
                     elif next_symbol in NON_TERMINATOR_LIST:
-                        follow[non_terminator_].update(first_all[next_symbol])
+                        follow[non_terminator_].update(first[next_symbol])
                         follow[non_terminator_].discard('ε')
 
     for i in range(non_terminator_counts):
@@ -171,9 +101,9 @@ if __name__ == '__main__':
     GRAMMAR = GRAMMAR_WITH_EPSILON
 
     for non_terminator in NON_TERMINATOR_LIST:
-        first_all[non_terminator] = find_first([non_terminator], NON_TERMINATOR_LIST, GRAMMAR_WITH_EPSILON, TERMINATORS_LIST)
+        first[non_terminator] = find_first([non_terminator], NON_TERMINATOR_LIST, GRAMMAR_WITH_EPSILON, TERMINATORS_LIST)
 
-    print(first_all)
+    print(first)
 
     find_follow('S_')
 

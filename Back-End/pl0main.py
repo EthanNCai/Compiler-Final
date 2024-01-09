@@ -5,6 +5,7 @@ from pathlib import Path
 
 from parser.AnalysisTable import AnalysisTable
 from parser.Grammar import PL0_NON_TERMINATOR, PL0_TERMINATOR, PL0_GRAMMAR
+from parser.Grammar import PL0_NON_TERMINATOR_NEW, PL0_TERMINATOR_NEW, PL0_GRAMMAR
 from parser.SpecFamily import SpecFamily
 
 FILE = Path(__file__).resolve()
@@ -40,7 +41,8 @@ TEST = ROOT / 'test.txt'
 构建项目集规范族
 """
 print('构建项目集规范族')
-spec_family = SpecFamily(PL0_GRAMMAR, PL0_NON_TERMINATOR, PL0_TERMINATOR)
+# spec_family = SpecFamily(PL0_GRAMMAR, PL0_NON_TERMINATOR, PL0_TERMINATOR)
+spec_family = SpecFamily(PL0_GRAMMAR, PL0_NON_TERMINATOR_NEW, PL0_TERMINATOR_NEW)
 
 """
 构建分析表
