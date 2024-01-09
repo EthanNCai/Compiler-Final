@@ -1,14 +1,9 @@
 from AnalysisTable import AnalysisTable
 from SpecFamily import SpecFamilyItem, SpecFamily
-from AnalysisStack import AnalysisStack     
+from Parser import Parser
+from Grammar import GRAMMAR, GRAMMAR_WITH_EPSILON, NON_TERMINATOR, TERMINATOR
 
-
-GRAMMAR = {
-    'S_': (['S'],),
-    'S': (['B', 'B']),
-    'B': (['b', 'B'], ['a'],),
-}
-
+"""
 
 spec_family = SpecFamily(grammar=GRAMMAR)
 spec_family.insertExgrammar(0, "S_", ["S"])
@@ -89,13 +84,13 @@ spec_family_item_9 = SpecFamilyItem(state=9)
 spec_family_item_9.insertContent("B", ["b", "B", "^"], ["$"])
 spec_family.insertSpecFamilyItem(spec_family_item_9)
 
+"""
+
 
 def main():
-    analysis_table = AnalysisTable(spec_family)
-    print(analysis_table.goto)
-    print(analysis_table.action)
-    print(analysis_table.isLR1)
-    analysis_stack = AnalysisStack(analysis_table, "aa")
-    analysis_stack.analyse()
+    spec_family = SpecFamily(GRAMMAR, NON_TERMINATOR)
+    analysis_table = AnalysisTable(spec_family, TERMINATOR, NON_TERMINATOR)
+    analysis_table.to_excel('output.xlsx')
+
 
 main()

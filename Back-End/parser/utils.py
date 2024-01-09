@@ -1,6 +1,7 @@
 import itertools
 from SpecFamily import SpecFamily
-from Grammar import GRAMMAR
+from Grammar import GRAMMAR, GRAMMAR_WITH_EPSILON, PL0_GRAMMAR
+from Grammar import PL0_NON_TERMINATOR
 
 """
 G[S_]:
@@ -88,8 +89,7 @@ def find_index(target, _list):
 
 
 def closure(grammar):
-    sf = SpecFamily(grammar)
-    sf.computeSpecFamilyItem()
+    sf = SpecFamily(grammar, PL0_NON_TERMINATOR)
     for each_list in sf.content:
         print('The grammar:')
         for content in each_list.content:
@@ -99,8 +99,8 @@ def closure(grammar):
         print('----------------------------')
 
 
-
-
 if __name__ == '__main__':
-    GRAMMAR = GRAMMAR
+    # GRAMMAR = GRAMMAR
+    # GRAMMAR = GRAMMAR_WITH_EPSILON
+    GRAMMAR = PL0_GRAMMAR
     closure(GRAMMAR)
