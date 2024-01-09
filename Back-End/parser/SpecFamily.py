@@ -77,6 +77,8 @@ class SpecFamily:
         self.exgrammar = []
         self.content = []
         self.item_first_production_list = []
+        self.item_first_production_dict_list = []
+        self.computeSpecFamily()
 
     def insertExgrammar(self, index, non_terminator, expression):
         self.exgrammar.append(tuple([index, non_terminator, expression]))
@@ -85,21 +87,23 @@ class SpecFamily:
         self.content.append(specFamilyItem)
 
     def insertItemFirstProduction(self, non_terminator, production, forward_sym, status):
-        # 这张列表将会记录每一个状态集首个产生式的左侧，右部，前看符号，以及状态：status
-        self.item_first_production_list.append(tuple([non_terminator, production, forward_sym, status]))
+        # 这张列表将会记录每一个状态集的初始产生式：{status：[产生式的左侧，右部，前看符号}
+        first_production_dict = {status: [non_terminator, production, forward_sym]}
+        self.item_first_production_dict_list.append(first_production_dict)
 
     def isInItemFirstProduction(self, non_terminator, production, forward_sym):
         # 判断传入的产生式是否已经在某个项目集中出现过
-        for existing_symbol, existing_production, existing_fir_set, _ in self.item_first_production_list:
-            if existing_symbol == non_terminator and existing_production == production and existing_fir_set == forward_sym:
-                # 如出现过则返回对应的状态号，否则返回false
-                status = _
-                return status
+        for item in self.item_first_production_dict_list:
+            for status, production_info in item.items():
+                existing_symbol, existing_production, existing_fir_set = production_info
+                if existing_symbol == non_terminator and existing_production == production and existing_fir_set == forward_sym:
+                    # 如出现过则返回对应的状态号
+                    return status
         return False
 
     def get_new_state(self):
         # 获取最新项目集编号
-        new_state = max(item[-1] for item in self.item_first_production_list)
+        new_state = max(status for item in self.item_first_production_dict_list for status in item.keys())
 
         return new_state
 
@@ -147,18 +151,23 @@ class SpecFamily:
                         # 对所有的文法，碰到以该符号开头的文法，则加入到项目集
                         if symbol == grammar[1]:
                             right_production = grammar[2].copy()
-                            # if right_production == 'ε':
-                            #     # 空集特别考虑
-                            #
-                            right_production.insert(0, '^')
+
+                            if right_production[0] == 'ε':
+                                # 空集特别考虑， 直接将 'ε' 替换成 '^'
+                                right_production[0] = '^'
+                            else:
+                                right_production.insert(0, '^')
+
                             if caret_index + 1 < len(production) - 1:
                                 # 如果求闭包的产生式的'^'后面的元素不是最后一个元素
-                                fir_sym_set = find_first([production[-1], fir_sym])
+                                # print(*fir_sym)
+                                fir_sym_set = find_first([production[-1], *fir_sym])
                             else:
                                 # 如果 ^ 后面的元素是最后一个
                                 fir_sym_set = fir_sym
-                            if specFamilyItem.isInItem(symbol, right_production, fir_sym_set) == False:
+                            if not specFamilyItem.isInItem(symbol, right_production, fir_sym_set):
                                 # 不在当前项目集，则添加
+                                # print('breakpoint')
                                 specFamilyItem.insertContent(symbol, right_production, list(fir_sym_set))
                             else:
                                 # 存在当前项目集规范组
@@ -186,9 +195,12 @@ class SpecFamily:
                 sate = self.isInItemFirstProduction(non_terminator, production_move, fir_set)
                 if sate == False:
                     # 不在项目集的首部
-                    new_status = self.get_new_state() + 1
-                    specFamilyItem.insertTransfrom(receive_operator, new_status)
-                    self.insertItemFirstProduction(non_terminator, production_move, fir_set, new_status)
+                    if receive_operator in specFamilyItem.transfrom:
+                        new_status = specFamilyItem.transfrom[receive_operator]
+                    else:
+                        new_status = self.get_new_state() + 1
+                        specFamilyItem.insertTransfrom(receive_operator, new_status)
+                    self.insertItemFirstProduction(non_terminator, production_move, list(fir_set), new_status)
 
                 else:
                     specFamilyItem.insertTransfrom(receive_operator, sate)
@@ -196,12 +208,7 @@ class SpecFamily:
                 # ^ 已经到了产生式末尾
                 pass
 
-        ...
-
     def computeSpecFamily(self):
-        """
-        计算项目集规范族, 计算后的结果将保存在content中
-        """
         self.extendedGrammar()
 
         first_grammar = self.exgrammar[0]
@@ -211,13 +218,22 @@ class SpecFamily:
         state = 0
         self.insertItemFirstProduction(non_terminator=first_grammar[1], production=right_production,
                                        forward_sym=fir_sym, status=state)
-        for each_first_production in self.item_first_production_list:
-            non_terminator = each_first_production[0]
-            production = each_first_production[1]
-            forward_sym = each_first_production[2]
-            state = each_first_production[3]
-            sfi = SpecFamilyItem(state)
-            sfi.insertContent(non_terminator=non_terminator, expression=production, forward_sym=forward_sym)
-            self.closureItem(sfi)
-            self.getTransform(sfi)
-            self.insertSpecFamilyItem(sfi)
+        for item in self.item_first_production_dict_list:
+            for state, production_info in item.items():
+                non_terminator, production, forward_sym = production_info
+                if self.content:
+                    flag = False
+                    for each_item in self.content:
+                        if state == each_item.state:
+                            sfi = each_item
+                            flag = True
+                            break
+                    if (flag == False):
+                        sfi = SpecFamilyItem(state)
+                else:
+                    # 对初始状态集I0直接创建一个项目集
+                    sfi = SpecFamilyItem(state)
+                sfi.insertContent(non_terminator=non_terminator, expression=production, forward_sym=list(forward_sym))
+                self.closureItem(sfi)
+                self.getTransform(sfi)
+                self.insertSpecFamilyItem(sfi)

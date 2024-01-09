@@ -105,9 +105,12 @@ class AnalysisTable:
                     exp_to_match = copy.deepcopy(expression)
                     exp_to_match.pop()
                     exGrammarIndex = -1
-                    for exp_a_index, _, exp_a in exGrammar:
-                        if exp_a == exp_to_match:
+                    if not exp_to_match:
+                        exp_to_match = ['ε']
+                    for exp_a_index, exp_non_terminator, exp_a in exGrammar:
+                        if exp_a == exp_to_match and non_terminator == exp_non_terminator:
                             exGrammarIndex = exp_a_index
+                            break
                     if exGrammarIndex == -1:
                         print("ERROR")
                     for forward_sym in forward_syms:
