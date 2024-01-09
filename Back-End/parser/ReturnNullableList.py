@@ -43,6 +43,7 @@ def recursive_first_finding(current_non_terminator, g_pack):
 
 
 def _find_first(expression_in, non_terminator_in, grammar_in, terminator_in):
+    first.clear()
     expression = copy.deepcopy(expression_in)
     g_pack = (non_terminator_in, grammar_in, terminator_in)
     first_sym = expression[0]

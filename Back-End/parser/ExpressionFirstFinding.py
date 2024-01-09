@@ -84,7 +84,7 @@ def find_first(expression_in, non_terminator_in, grammar_in, terminator_in):
                 first.add(next_first_sym)
             else:
                 recursive_first_finding(next_first_sym, g_pack)
-    print(first)
+
     return first
 
 
@@ -94,4 +94,5 @@ def generate_nullable_list(g_pack):
         input = [non_terminator, ]
         if 'ε' in _find_first(input, non_terminator_in, grammar_in, terminator_in):
             nullable_non_terminator.update(input)
+    print(nullable_non_terminator)
 
