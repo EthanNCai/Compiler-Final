@@ -92,9 +92,7 @@ spec_family.insertSpecFamilyItem(spec_family_item_9)
 
 def main():
     analysis_table = AnalysisTable(spec_family)
-    print(analysis_table.goto)
-    print(analysis_table.action)
-    print(analysis_table.isLR1)
+    analysis_table.to_excel('output.xlsx')
     analysis_stack = AnalysisStack(analysis_table, "aa")
     analysis_stack.analyse()
 

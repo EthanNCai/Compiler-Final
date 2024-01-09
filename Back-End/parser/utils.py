@@ -99,6 +99,8 @@ def closure(grammar):
         print('----------------------------')
 
 
+
+
 if __name__ == '__main__':
     # GRAMMAR = GRAMMAR
     GRAMMAR = GRAMMAR_WITH_EPSILON

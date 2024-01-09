@@ -1,5 +1,6 @@
 from Grammar import NON_TERMINATOR, TERMINATOR
 import copy
+import pandas as pd
 
 """
 分析表的例子它就像下面这样
@@ -22,7 +23,7 @@ import copy
         },
         "4":{
             "b":"R3",
-            "a":"R3",
+            "a":"R3",  
         },
         "5":{
             "$":"R1"
@@ -71,7 +72,6 @@ class AnalysisTable:
         self.isLR1 = True
         self.construct_goto()
         self.construct_action()
-
 
     def construct_goto(self):
         for specFamilyItem in self.specFamily.content:
@@ -123,7 +123,7 @@ class AnalysisTable:
                         if forward_sym in self.action[state_index]:
                             self.isLR1 = False
                         self.action[state_index][forward_sym] = 'R' + \
-                            str(exGrammarIndex)
+                                                                str(exGrammarIndex)
 
             # 加入shift
             for input, destination in state_transform.items():
@@ -136,3 +136,13 @@ class AnalysisTable:
                     self.action[state_index][input] = 'S' + str(destination)
 
         ...
+
+    def to_excel(self, path):
+        df = pd.DataFrame()
+        for state, terminator_dict in self.action.items():
+            for terminator, action in terminator_dict.items():
+                df.loc[str(state), str(terminator)] = action
+        for non_terminator, state_dict in self.goto.items():
+            for state, goto in state_dict.items():
+                df.loc[str(state), str(non_terminator)] = goto
+        df.to_excel(path, index=True)
