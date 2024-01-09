@@ -1,5 +1,10 @@
 import copy
+
 from parser.ReturnNullableList import _find_first
+
+from .ReturnNullableList import _find_first
+from .Grammar import GRAMMAR_WITH_EPSILON
+import sys
 
 """
 NON_TERMINATOR = ['E', 'E_', 'T', 'T_', 'F']

@@ -1,4 +1,5 @@
-from parser.ExpressionFirstFinding import find_first
+
+from .ExpressionFirstFinding import  find_first
 
 """
 SpecFamilyItem 的结构例子
