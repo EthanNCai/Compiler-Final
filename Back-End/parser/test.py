@@ -1,5 +1,6 @@
 from AnalysisTable import AnalysisTable
 from SpecFamily import SpecFamilyItem, SpecFamily
+from AnalysisStack import AnalysisStack     
 
 
 GRAMMAR = {
@@ -94,6 +95,7 @@ def main():
     print(analysis_table.goto)
     print(analysis_table.action)
     print(analysis_table.isLR1)
-
+    analysis_stack = AnalysisStack(analysis_table, "aa")
+    analysis_stack.analyse()
 
 main()
