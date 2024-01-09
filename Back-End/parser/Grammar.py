@@ -10,6 +10,10 @@ GRAMMAR = {
 # 警告对于'S_': (['S'],), 其 ] 后面的 , 是不可省略的!
 # 警告对于'S_': (['S'],), 其 ']' 后面的 ',' 是不可省略的!
 
+PL0_NON_TERMINATOR = []
+PL0_TERMINATOR = []
+
+
 PL0_GRAMMAR = {
     'PROG': (['SUBPROG', '.'],),
     'SUBPROG': (['CONST', 'VARIABLE', 'PROCEDURE', 'M_STATEMENT', 'STATEMENT'],),
