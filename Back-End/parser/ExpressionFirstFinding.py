@@ -1,6 +1,6 @@
 import copy
 from .ReturnNullableList import _find_first
-from .Grammar import GRAMMAR_WITH_EPSILON
+from .Grammar import PL0_TERMINATOR, PL0_NON_TERMINATOR, PL0_GRAMMAR
 import sys
 
 """
@@ -102,3 +102,10 @@ def generate_nullable_list(g_pack):
         if 'ε' in _find_first(input, non_terminator_in, grammar_in, terminator_in):
             nullable_non_terminator.update(input)
 
+
+def main():
+    find_first(['CONST', 'VARIABLE', 'PROCEDURE', 'M_STATEMENT', 'STATEMENT', '.'], PL0_NON_TERMINATOR, PL0_GRAMMAR,
+               PL0_TERMINATOR)
+
+
+main()
