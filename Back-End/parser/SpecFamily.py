@@ -78,7 +78,6 @@ class SpecFamily:
         self.terminator_in = terminator
         self.exgrammar = []
         self.content = []
-        self.item_first_production_list = []
         self.item_first_production_dict_list = []
         self.computeSpecFamily()
 
@@ -134,6 +133,19 @@ class SpecFamily:
                 self.insertExgrammar(index, lp, rp)
                 index += 1
 
+    def merge_productions(self, specFamilyItem):
+        merged_productions = {}
+        productions = specFamilyItem.content
+        for symbol, production, lookahead in productions:
+            key = (symbol, tuple(production))
+            if key in merged_productions:
+                merged_productions[key] = (symbol, production, merged_productions[key][2] + lookahead)
+            else:
+                merged_productions[key] = (symbol, production, lookahead)
+
+        result = list(merged_productions.values())
+        specFamilyItem.content = result
+
     def closureItem(self, specFamilyItem):
         """
         计算单个项目集的闭包
@@ -150,7 +162,7 @@ class SpecFamily:
                 if symbol in self.non_terminator_in:
                     # 是非终结符
                     for grammar in self.exgrammar:
-                        # 对所有的文法，碰到以该符号开头的文法，则加入到项目集
+                        # 对所有的文法，碰到以symbol符号开头的文法，则加入到项目集
                         if symbol == grammar[1]:
                             right_production = grammar[2].copy()
 
@@ -163,17 +175,21 @@ class SpecFamily:
                             if caret_index + 1 < len(production) - 1:
                                 # 如果求闭包的产生式的'^'后面的元素不是最后一个元素
                                 # print(*fir_sym)
-                                fir_sym_set = find_first([production[-1], *fir_sym], self.non_terminator_in, self.grammar, self.terminator_in)
+                                fir_sym_set = find_first([production[-1], *fir_sym], self.non_terminator_in,
+                                                         self.grammar, self.terminator_in)
+                                fir_sym_list = list(fir_sym_set)
                             else:
                                 # 如果 ^ 后面的元素是最后一个
                                 fir_sym_set = fir_sym
-                            if not specFamilyItem.isInItem(symbol, right_production, fir_sym_set):
+                                fir_sym_list = list(fir_sym_set)
+                            if not specFamilyItem.isInItem(symbol, right_production, fir_sym_list):
                                 # 不在当前项目集，则添加
-                                # print('breakpoint')
-                                specFamilyItem.insertContent(symbol, right_production, list(fir_sym_set))
+                                specFamilyItem.insertContent(symbol, right_production, fir_sym_list)
                             else:
                                 # 存在当前项目集规范组
                                 pass
+                        else:
+                            continue
                 else:
                     # 非终结符忽略
                     pass
@@ -236,5 +252,6 @@ class SpecFamily:
                     sfi = SpecFamilyItem(state)
                 sfi.insertContent(non_terminator=non_terminator, expression=production, forward_sym=list(forward_sym))
                 self.closureItem(sfi)
+                self.merge_productions(sfi)
                 self.getTransform(sfi)
                 self.insertSpecFamilyItem(sfi)
