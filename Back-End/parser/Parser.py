@@ -2,7 +2,7 @@ from utils import find_first, find_follow
 import json
 
 class Parser:
-    def __init__(self, AnalysisTable, json_path, token_to_terminator_bb, terminator_, non_terminator_):
+    def __init__(self, AnalysisTable, json_path, token_to_terminator_bb, terminator_, non_terminator_, grammar):
         self.token_to_terminator_bb = token_to_terminator_bb
         self.analysetable = AnalysisTable
         self.input = self.json_to_str(json_path)
@@ -10,6 +10,7 @@ class Parser:
         self.terminator_in = terminator_
         self.state_stack = [0]
         self.symbol_stack = []
+        self.grammar = grammar
         self.first = {non_term: set() for non_term in non_terminator_}
         self.follow = {non_term: set() for non_term in non_terminator_} 
 
@@ -26,7 +27,7 @@ class Parser:
 
     def compute_fir_fol(self):
         for non_terminator in self.non_terminator_in:
-            find_first(non_terminator, non_terminator, self.first)
+            find_first(non_terminator, non_terminator, )
         find_follow(self.non_terminator_in[0], self.follow)
 
     def analyse(self, recovery):

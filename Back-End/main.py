@@ -65,5 +65,5 @@ lexer.run()
 语法分析器
 """
 
-analysis_stack = Parser(analysis_table, json_path, token_to_terminator_bb, TERMINATOR, NON_TERMINATOR)
+analysis_stack = Parser(analysis_table, json_path, token_to_terminator_bb, TERMINATOR, NON_TERMINATOR, GRAMMAR_WITH_EPSILON)
 analysis_stack.analyse("B")

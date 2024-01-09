@@ -50,20 +50,20 @@ PL0_NON_TERMINATOR = ['PROG', 'SUBPROG', 'M_STATEMENT', 'CONST', 'CONST_', 'CONS
                       'PROCEDURE', 'PROCEDURE_', 'PROC_HEAD', 'STATEMENT', 'ASSIGN', 'COMP', 'COMP_BEGIN', 'COND',
                       'M_COND', 'CONDITION', 'EXPR', 'ITEM', 'FACTOR', 'PLUS_MINUS', 'MUL_DIV', 'REL', 'CALL', 'WHILE',
                       'M_WHILE_FORE', 'M_WHILE_TAIL', 'READ', 'READ_BEGIN', 'WRITE', 'WRITE_BEGIN']
-PL0_TERMINATOR = [';', ',', 'const', '=', 'num', 'var', 'id', ':=', 'end', 'begin', 'if', 'then', 'odd', '(', ')', '+',
-                  '-', '*', '/', '=', '#', '<', '<=', '>', '>=', 'call', 'while', 'do', 'read', 'write']
+PL0_TERMINATOR = ['.', ';', ',', 'const', '=', 'num', 'var', 'id', ':=', 'end', 'begin', 'if', 'then', 'odd', '(', ')',
+                  '+', '-', '*', '/', '=', '#', '<', '<=', '>', '>=', 'call', 'while', 'do', 'read', 'write']
 PL0_GRAMMAR = {
     'PROG': (['SUBPROG'],),  #
-    'SUBPROG': (['CONST', 'VARIABLE', 'PROCEDURE', 'M_STATEMENT', 'STATEMENT'],), #
-    'M_STATEMENT': (['ε'],), #
-    'CONST': (['CONST_', ';'], ['ε']), #
+    'SUBPROG': (['CONST', 'VARIABLE', 'PROCEDURE', 'M_STATEMENT', 'STATEMENT'],),  #
+    'M_STATEMENT': (['ε'],),  #
+    'CONST': (['CONST_', ';'], ['ε']),  #
     'CONST_': (['CONST_', ',', 'CONST_DEF'], ['const', 'CONST_DEF']),
     'CONST_DEF': (['ID', '=', 'UINT'],),
     'UINT': (['num'],),
-    'VARIABLE': (['VARIABLE_', ';'], ['ε']), #
+    'VARIABLE': (['VARIABLE_', ';'], ['ε']),  #
     'VARIABLE_': (['var', 'ID'], ['VARIABLE_', ',', 'ID']),
     'ID': (['id'],),
-    'PROCEDURE': (['PROCEDURE_'], ['ε']), #
+    'PROCEDURE': (['PROCEDURE_'], ['ε']),  #
     'PROCEDURE_': (['PROCEDURE_', 'PROC_HEAD', 'SUBPROG', ';'], ['PROC_HEAD', 'SUBPROG', ';']),
     'PROC_HEAD': (['procedure', 'ID', ';'],),
     'STATEMENT': (['ASSIGN'], ['COND'], ['WHILE'], ['CALL'], ['READ'], ['WRITE'], ['COMP'], ['ε']),
@@ -71,7 +71,7 @@ PL0_GRAMMAR = {
     'COMP': (['COMP_BEGIN', 'end'],),
     'COMP_BEGIN': (['begin', 'STATEMENT'], ['COMP_BEGIN', ';', 'STATEMENT']),
     'COND': (['if', 'CONDITION', 'then', 'M_COND', 'STATEMENT'],),
-    'M_COND': (['ε'],), #
+    'M_COND': (['ε'],),  #
     'CONDITION': (['EXPR', 'REL', 'EXPR'], ['odd', 'EXPR']),
     'EXPR': (['PLUS_MINUS', 'ITEM'], ['EXPR', 'PLUS_MINUS', 'ITEM'], ['ITEM']),
     'ITEM': (['FACTOR'], ['ITEM', 'MUL_DIV', 'FACTOR'],),

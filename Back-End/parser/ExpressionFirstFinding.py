@@ -2,6 +2,7 @@ import copy
 from .ReturnNullableList import _find_first
 from .Grammar import GRAMMAR_WITH_EPSILON
 import sys
+
 """
 NON_TERMINATOR = ['E', 'E_', 'T', 'T_', 'F']
 TERMINATOR = ['+', '*', '(', ')', 'id']
@@ -61,8 +62,11 @@ def is_this_non_terminator_nullable(target_non_terminator, g_pack):
         return False
 
 
-def find_first(expression_in, non_terminator_in, grammar_in, terminator_in):
+def find_first(expression_in, non_terminator_in_, grammar_in_, terminator_in_):
     expression = copy.deepcopy(expression_in)
+    non_terminator_in = copy.deepcopy(non_terminator_in_)
+    grammar_in = copy.deepcopy(grammar_in_)
+    terminator_in = copy.deepcopy(terminator_in_)
     g_pack = (non_terminator_in, grammar_in, terminator_in)
     generate_nullable_list(g_pack)
     first_sym = expression[0]
@@ -93,5 +97,4 @@ def generate_nullable_list(g_pack):
         input = [non_terminator, ]
         if 'ε' in _find_first(input, non_terminator_in, grammar_in, terminator_in):
             nullable_non_terminator.update(input)
-    print(nullable_non_terminator)
 

@@ -1,12 +1,11 @@
 """
 这是伪代码！这不是真的代码，仅供参考！
 """
-from parser.Grammar import token_to_terminator_bb, GRAMMAR_WITH_EPSILON, PL0_NON_TERMINATOR, PL0_TERMINATOR, PL0_GRAMMAR
-from lexer.Lexer import Lexer
 from pathlib import Path
-from parser.Parser import Parser
-from parser.SpecFamily import SpecFamily
+
 from parser.AnalysisTable import AnalysisTable
+from parser.Grammar import PL0_NON_TERMINATOR, PL0_TERMINATOR, PL0_GRAMMAR
+from parser.SpecFamily import SpecFamily
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # root directory
@@ -49,6 +48,7 @@ spec_family = SpecFamily(PL0_GRAMMAR, PL0_NON_TERMINATOR, PL0_TERMINATOR)
 print('构建分析表')
 analysis_table = AnalysisTable(spec_family, PL0_TERMINATOR, PL0_NON_TERMINATOR)
 analysis_table.to_excel('output.xlsx')
+print(analysis_table.isLR1)
 
 """
 词法分析器分析
