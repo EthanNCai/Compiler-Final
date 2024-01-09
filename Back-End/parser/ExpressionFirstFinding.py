@@ -29,7 +29,7 @@ first = set()
 
 def recursive_first_finding(current_non_terminator, non_terminator_in, grammar_in):
     # decisions = GRAMMAR.get(current_non_terminator)
-    decisions = GRAMMAR_WITH_EPSILON.get(current_non_terminator)
+    decisions = grammar_in.get(current_non_terminator)
     if decisions:
         for decision in decisions:
             # 常规操作
@@ -45,7 +45,7 @@ def recursive_first_finding(current_non_terminator, non_terminator_in, grammar_i
 
 def is_this_non_terminator_nullable(target_non_terminator, non_terminator_in, grammar_in):
     # decisions = GRAMMAR.get(target_non_terminator)
-    decisions = GRAMMAR_WITH_EPSILON.get(target_non_terminator)
+    decisions = grammar_in.get(target_non_terminator)
     if decisions:
         for decision in decisions:
             first_sym = decision[0]
