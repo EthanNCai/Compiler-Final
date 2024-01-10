@@ -21,6 +21,7 @@ class Parser:
         input = ""
 
         for _, value in data.items():
+            print(value[0])
             input += self.token_to_terminator_bb(value[0])
             input = input + " "
         return input

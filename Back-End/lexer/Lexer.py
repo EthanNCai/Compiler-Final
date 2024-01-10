@@ -29,7 +29,8 @@ TOKEN_DICT = {
     "begin": 27,
     "writeln": 28,
     "procedure": 29,
-    "end": 30
+    "end": 30,
+    ".": 33
 }
 
 HINT_DICT = {
@@ -141,7 +142,7 @@ class DFA:
             return 'INID'
         elif symbol_in.isdigit():
             return 'INNUM'
-        elif symbol_in in ["+", "-", "*", "/", "(", ")", ";", "[", "]", "=", ","]:
+        elif symbol_in in ["+", "-", "*", "/", "(", ")", ";", "[", "]", "=", ",", "."]:
             return 'DONEA'
         elif symbol_in == ":":
             return 'BEFASS'

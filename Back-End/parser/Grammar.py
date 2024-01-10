@@ -176,6 +176,8 @@ def token_to_terminator_pl0(token):
         return 'procedure'
     if token == 30:
         return 'end'
+    if token == 33:
+        return '.'
     if token == 100:
         return '出错'
 
