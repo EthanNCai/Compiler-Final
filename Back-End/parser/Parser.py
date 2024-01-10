@@ -46,7 +46,7 @@ class Parser:
             # print(current_state)
             if action_entry is not None:
                 action = action_entry.get(current_symbol)
-                # print(current_state)
+                # print(current_symbol)
                 if action is not None:
                     state_stack_str = str(self.state_stack)
                     symbol_stack_str = str(self.symbol_stack)
@@ -93,10 +93,11 @@ class Parser:
                     while len(input_buffer) > 0 and input_buffer[0] not in self.follow.get(recovery) and input_buffer[0] != '$':
                         input_buffer.pop(0)
                     
-                    if input_buffer[0] == '$':
+                    if input_buffer[0] == '$' or input_buffer[0] == '.':
                         print("No input symbol can be found for the error to be successfully recovered!")
                         break
                     # 恢复正常分析：将 A 和 goto[s, A] 推入栈中
+
                     self.symbol_stack.append(recovery)
                     new_state = goto_table.get(recovery).get(top_state)
                     self.state_stack.append(int(new_state))
