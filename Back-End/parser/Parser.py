@@ -22,7 +22,7 @@ class Parser:
 
         for _, value in data.items():
             input += self.token_to_terminator_bb(value[0])
-
+            input = input + " "
         return input
 
     def compute_fir_fol(self):
@@ -34,7 +34,7 @@ class Parser:
     def analyse(self, recovery):
         action_table = self.analysetable.action
         goto_table = self.analysetable.goto
-        input_buffer = list(self.input) + ['$']
+        input_buffer = self.input.split() + ['$']
 
         print("{:<20} {:<20} {:<20} {:<20}".format("State Stack", "Symbol Stack", "Input", "Action"))
 
@@ -45,7 +45,7 @@ class Parser:
 
             if action_entry is not None:
                 action = action_entry.get(current_symbol)
-
+                print(current_state)
                 if action is not None:
                     state_stack_str = str(self.state_stack)
                     symbol_stack_str = str(self.symbol_stack)
@@ -57,20 +57,20 @@ class Parser:
 
                     if action[0] == 'S':
                         # 移入操作，将状态和符号入栈
-                        new_state = action[1]
+                        new_state = action[1:]
                         self.state_stack.append(int(new_state))
                         self.symbol_stack.append(current_symbol)
                         input_buffer.pop(0)
                     elif action[0] == 'R':
                         # 规约操作，弹出相应数量的状态和符号，进行Goto操作
-                        index = int(action[1])
+                        index = int(action[1:])
                         lhs = self.analysetable.specFamily.exgrammar[index][1]
                         rhs = self.analysetable.specFamily.exgrammar[index][2]
                         num_to_pop = len(rhs)
-
                         for _ in range(num_to_pop):
-                            self.symbol_stack.pop(-1)
-                            self.state_stack.pop(-1)
+                            if rhs != ['ε']:
+                                self.symbol_stack.pop(-1)
+                                self.state_stack.pop(-1)
 
                         self.symbol_stack.append(lhs)
                         current_state = self.state_stack[-1]
@@ -88,7 +88,6 @@ class Parser:
                         if goto_table.get(recovery).get(top_state) is not None:
                             break
                         self.state_stack.pop()
-
                     # 丢弃输入符号，直至找到符号 a，它可以合法地跟随 A
                     while len(input_buffer) > 0 and input_buffer[0] not in self.follow.get(recovery):
                         input_buffer.pop(0)

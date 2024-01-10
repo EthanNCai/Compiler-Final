@@ -6,11 +6,15 @@ from pathlib import Path
 from parser.AnalysisTable import AnalysisTable
 from parser.Grammar import PL0_NON_TERMINATOR, PL0_TERMINATOR, PL0_GRAMMAR
 from parser.Grammar import PL0_NON_TERMINATOR_NEW, PL0_TERMINATOR_NEW, PL0_GRAMMAR
+from parser.Grammar import token_to_terminator_pl0
 from parser.SpecFamily import SpecFamily
+from parser.Parser import Parser
+from lexer.Lexer import Lexer
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # root directory
 TEST = ROOT / 'test.txt'
+JSON = ROOT / 'lexer' / 'temp'
 
 # 首先要导入下级目录的东西
 
@@ -56,15 +60,16 @@ print(analysis_table.isLR1)
 词法分析器分析
 """
 
-# json_path = 'output.json'
-# test_path = str(TEST)
+json_path = str(JSON / 'output.json')
+test_path = str(TEST)
 
-# lexer = Lexer(test_path)
-# lexer.run()
+lexer = Lexer(test_path, json_path)
+lexer.run()
 
 """
 语法分析器
 """
 
-# analysis_stack = Parser(analysis_table, 'output.json', token_to_terminator_bb)
-# analysis_stack.analyse()
+analysis_stack = Parser(analysis_table, json_path, token_to_terminator_pl0, PL0_TERMINATOR_NEW, PL0_NON_TERMINATOR_NEW, PL0_GRAMMAR)
+analysis_stack.compute_fir_fol()
+analysis_stack.analyse("STATEMENT")
