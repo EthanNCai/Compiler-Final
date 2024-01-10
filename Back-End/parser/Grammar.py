@@ -103,6 +103,13 @@ PL0_GRAMMAR = {
     'WRITE_BEGIN': (['write', '(', 'ID'], ['WRITE_BEGIN', ',', 'ID']),
 }
 
+"""
+PL0_TERMINATOR_NEW = [
+    '.', ';', 'const', ',', '=', 'num', 'var', 'id', 'procedure', 'begin', 'end',
+    'if', 'then', 'odd', '+', '-', '*', '/', '=', '#', '<', '<=', '>', '>=', 'call',
+    'while', 'do', 'read', '(', ')', 'write', '^'
+]
+"""
 
 def token_to_terminator_bb(token):
     if token == 22:
@@ -114,9 +121,69 @@ def token_to_terminator_bb(token):
 
 
 def token_to_terminator_pl0(token):
-    if token == 22:
-        return 'a'
+    if token == 0:
+        return ' '
+    if token == 1:
+        return 'id'
+    if token == 2:
+        return 'num'
+    if token == 3:
+        return '+'
+    if token == 4:
+        return '-'
+    if token == 5:
+        return '*'
+    if token == 6:
+        return '/'
+    if token == 7:
+        return '='
+    if token == 8:
+        return '>'
+    if token == 9:
+        return '<'
+    if token == 10:
+        return '<>'
+    if token == 11:
+        return '<='
+    if token == 12:
+        return '>='
+    if token == 13:
+        return '('
+    if token == 14:
+        return ')'
+    if token == 15:
+        return '{'
+    if token == 16:
+        return '}'
+    if token == 17:
+        return ';'
+    if token == 18:
+        return ','
+    if token == 19:
+        return '"'
+    if token == 20:
+        return ':='
     if token == 21:
-        return 'b'
+        return 'var'
+    if token == 22:
+        return 'if'
+    if token == 23:
+        return 'then'
+    if token == 24:
+        return 'else'
+    if token == 25:
+        return 'while'
+    if token == 26:
+        return 'for'
+    if token == 27:
+        return 'begin'
+    if token == 28:
+        return 'writeln'
+    if token == 29:
+        return 'procedure'
+    if token == 30:
+        return 'end'
+    if token == 100:
+        return '出错'
 
     print('ERROR!')
