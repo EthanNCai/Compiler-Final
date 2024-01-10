@@ -89,9 +89,12 @@ class Parser:
                             break
                         self.state_stack.pop()
                     # 丢弃输入符号，直至找到符号 a，它可以合法地跟随 A
-                    while len(input_buffer) > 0 and input_buffer[0] not in self.follow.get(recovery):
+                    while len(input_buffer) > 0 and input_buffer[0] not in self.follow.get(recovery) and input_buffer[0] != '$':
                         input_buffer.pop(0)
                     
+                    if input_buffer[0] == '$':
+                        print("No input symbol can be found for the error to be successfully recovered!")
+                        break
                     # 恢复正常分析：将 A 和 goto[s, A] 推入栈中
                     self.symbol_stack.append(recovery)
                     new_state = goto_table.get(recovery).get(top_state)
