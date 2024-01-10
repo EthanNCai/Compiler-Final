@@ -143,6 +143,9 @@ class SpecFamily:
                 if new_lookahead_set.issubset(existing_lookahead_set):
                     merged_productions[key] = (
                         symbol, production, list(existing_lookahead_set.union(new_lookahead_set)))
+                elif new_lookahead_set - existing_lookahead_set:
+                    existing_lookahead_set.update(new_lookahead_set - existing_lookahead_set)
+                    merged_productions[key] = (symbol, production, list(existing_lookahead_set))
 
             else:
                 merged_productions[key] = (symbol, production, lookahead)
@@ -267,3 +270,4 @@ class SpecFamily:
                     self.insertSpecFamilyItem(sfi)
                 else:
                     continue
+                # self.insertSpecFamilyItem(sfi)
