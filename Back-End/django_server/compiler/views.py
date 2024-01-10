@@ -15,7 +15,6 @@ def get_analysis_table(request):
     response['Content-Disposition'] = 'attachment; filename=analysis_table.xlsx'
     return response
 
-
 def parse(request):
     if request.method == 'POST':
         # Read text from POST request body
