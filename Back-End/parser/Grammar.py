@@ -14,11 +14,10 @@ GRAMMAR_WITH_EPSILON = {
 
 PM_GRAMMAR = {
     'S_': (['S'],),
-    'S': (['A', 'a'], ['b', 'A', 'c'], ['B', 'c'], ['b', 'B', 'a'],),
-    'A': (['d'], ),
-    'B': (['d'],)
+    'S': (['A', 'a'], ['b', 'A', 'c'], ['d', 'c'], ['b', 'd', 'a'],),
+    'A': (['d'],),
 }
-PM_NON_TERMINATOR = ['S_', 'S', 'A', 'B']
+PM_NON_TERMINATOR = ['S_', 'S', 'A']
 PM_TERMINATOR = ['a', 'b', 'c', 'd']
 
 # 警告对于'S_': (['S'],), 其 ] 后面的 , 是不可省略的!
@@ -67,8 +66,8 @@ PL0_TERMINATOR_NEW = [
     'while', 'do', 'read', '(', ')', 'write', '^'
 ]
 PL0_GRAMMAR = {
-    'PROG_': (['PROG'],),
-    'PROG': (['SUBPROG', '.'],),  #
+    'PROG_': (['PROG', '.'],),
+    'PROG': (['SUBPROG'],),  #
     'SUBPROG': (['CONST', 'VARIABLE', 'PROCEDURE', 'M_STATEMENT', 'STATEMENT'],),  #
     'M_STATEMENT': (['ε'],),  #
     'CONST': (['CONST_', ';'], ['ε']),  #

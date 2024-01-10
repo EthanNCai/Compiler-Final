@@ -1,5 +1,4 @@
-
-from .ExpressionFirstFinding import  find_first
+from .ExpressionFirstFinding import find_first
 
 """
 SpecFamilyItem 的结构例子
@@ -144,6 +143,9 @@ class SpecFamily:
                 if new_lookahead_set.issubset(existing_lookahead_set):
                     merged_productions[key] = (
                         symbol, production, list(existing_lookahead_set.union(new_lookahead_set)))
+                elif new_lookahead_set - existing_lookahead_set:
+                    existing_lookahead_set.update(new_lookahead_set - existing_lookahead_set)
+                    merged_productions[key] = (symbol, production, list(existing_lookahead_set))
 
             else:
                 merged_productions[key] = (symbol, production, lookahead)
@@ -246,9 +248,9 @@ class SpecFamily:
                                        forward_sym=fir_sym, status=state)
         for item in self.item_first_production_dict_list:
             for state, production_info in item.items():
+                flag = False
                 non_terminator, production, forward_sym = production_info
                 if self.content:
-                    flag = False
                     for each_item in self.content:
                         if state == each_item.state:
                             sfi = each_item
@@ -263,4 +265,9 @@ class SpecFamily:
                 self.closureItem(sfi)
                 self.merge_productions(sfi)
                 self.getTransform(sfi)
-                self.insertSpecFamilyItem(sfi)
+                if (flag == False):
+                    # 如果项目集已经存在于项目集族中则不需要重复添加
+                    self.insertSpecFamilyItem(sfi)
+                else:
+                    continue
+                # self.insertSpecFamilyItem(sfi)
