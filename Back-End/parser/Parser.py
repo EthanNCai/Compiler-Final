@@ -65,8 +65,10 @@ class Parser:
                     elif action[0] == 'R':
                         # 规约操作，弹出相应数量的状态和符号，进行Goto操作
                         index = int(action[1:])
+                        print(index)
                         lhs = self.analysetable.specFamily.exgrammar[index][1]
                         rhs = self.analysetable.specFamily.exgrammar[index][2]
+                        print(lhs,rhs)
                         num_to_pop = len(rhs)
                         for _ in range(num_to_pop):
                             if rhs != ['ε']:
@@ -77,6 +79,7 @@ class Parser:
                         current_state = self.state_stack[-1]
                         new_state = goto_table.get(lhs).get(current_state)
                         self.state_stack.append(int(new_state))
+                        print(self.symbol_stack, self.state_stack)
                     elif action == "ACC":
                         print("Input Accepted!")
                         break
