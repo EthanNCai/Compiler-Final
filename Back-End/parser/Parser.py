@@ -36,23 +36,23 @@ class Parser:
         goto_table = self.analysetable.goto
         input_buffer = self.input.split() + ['$']
 
-        print("{:<20} {:<20} {:<20} {:<20}".format("State Stack", "Symbol Stack", "Input", "Action"))
+        print("{:<50} {:<50} {:<50} {:<50}".format("State Stack", "Symbol Stack", "Input", "Action"))
 
         while True:
             current_state = self.state_stack[-1]
             current_symbol = input_buffer[0]
             action_entry = action_table.get(current_state)
-
+            # print(current_state)
             if action_entry is not None:
                 action = action_entry.get(current_symbol)
-                print(current_state)
+                # print(current_state)
                 if action is not None:
                     state_stack_str = str(self.state_stack)
                     symbol_stack_str = str(self.symbol_stack)
                     input_buffer_str = str(input_buffer)
                     action_str = str(action)
 
-                    print("{:<20} {:<20} {:<20} {:<20}".format(state_stack_str, symbol_stack_str, input_buffer_str,
+                    print("{:<50} {:<50} {:<50} {:<50}".format(state_stack_str, symbol_stack_str, input_buffer_str,
                                                             action_str))
 
                     if action[0] == 'S':

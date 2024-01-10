@@ -52,7 +52,7 @@ spec_family = SpecFamily(PL0_GRAMMAR, PL0_NON_TERMINATOR_NEW, PL0_TERMINATOR_NEW
 构建分析表
 """
 print('构建分析表')
-analysis_table = AnalysisTable(spec_family, PL0_TERMINATOR, PL0_NON_TERMINATOR)
+analysis_table = AnalysisTable(spec_family, PL0_TERMINATOR_NEW, PL0_NON_TERMINATOR_NEW)
 analysis_table.to_excel('output.xlsx')
 print(analysis_table.isLR1)
 
