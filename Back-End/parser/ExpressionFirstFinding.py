@@ -1,7 +1,6 @@
 import copy
 
 from .ReturnNullableList import _find_first
-from .Grammar import PL0_TERMINATOR, PL0_NON_TERMINATOR, PL0_GRAMMAR
 import sys
 
 """

@@ -33,6 +33,9 @@ first = set()
 def recursive_first_finding(current_non_terminator, g_pack):
     non_terminator_in, grammar_in, terminator_in = g_pack
     decisions = grammar_in.get(current_non_terminator)
+    if not decisions:
+        print(current_non_terminator)
+
     for decision in decisions:
         # 常规操作
         first_sym = decision[0]

@@ -12,35 +12,110 @@ G[S_]:
         B  → bB|a
 """
 
-NON_TERMINATOR_LIST = ['S_', 'S', 'B']
-TERMINATORS_LIST = ['a', 'b']
+PL0_NON_TERMINATOR_NEW = ['PROG_',
+                          'PROG', 'SUBPROG', 'M_STATEMENT', 'CONST', 'CONST_', 'CONST_DEF', 'UINT',
+                          'VARIABLE', 'VARIABLE_', 'ID', 'PROCEDURE', 'PROCEDURE_', 'PROC_HEAD',
+                          'STATEMENT', 'ASSIGN', 'COMP', 'COMP_BEGIN', 'COND', 'M_COND', 'CONDITION',
+                          'EXPR', 'ITEM', 'FACTOR', 'PLUS_MINUS', 'MUL_DIV', 'REL', 'CALL',
+                          'WHILE', 'M_WHILE_FORE', 'M_WHILE_TAIL', 'READ', 'READ_BEGIN', 'WRITE', 'WRITE_BEGIN'
+                          ]
 
-non_terminator_counts = len(NON_TERMINATOR_LIST)
+PL0_TERMINATOR_NEW = [
+    '.', ';', 'const', ',', '=', 'num', 'var', 'id', 'procedure', 'begin', 'end',
+    'if', 'then', 'odd', '+', '-', '*', '/', '=', '#', '<', '<=', '>', '>=', 'call',
+    'while', 'do', 'read', '(', ')', 'write', '^'
+]
+
+non_terminator_counts = len(PL0_NON_TERMINATOR_NEW)
 
 nullable_non_terminator = set()
 
 first = {
-    'S': set(),
-    'S_': set(),
-    'B': set()
-    }
+    'PROG_': set(),
+    'PROG': set(),  #
+    'SUBPROG': set(),  #
+    'M_STATEMENT': set(),  #
+    'CONST': set(),  #
+    'CONST_': set(),
+    'CONST_DEF': set(),
+    'UINT': set(),
+    'VARIABLE': set(),  #
+    'VARIABLE_': set(),
+    'ID': set(),
+    'PROCEDURE': set(),  #
+    'PROCEDURE_': set(),
+    'PROC_HEAD': set(),
+    'STATEMENT': set(),
+    'ASSIGN': set(),
+    'COMP': set(),
+    'COMP_BEGIN': set(),
+    'COND': set(),
+    'M_COND': set(),  #
+    'CONDITION': set(),
+    'EXPR': set(),
+    'ITEM': set(),
+    'FACTOR': set(),
+    'PLUS_MINUS': set(),
+    'MUL_DIV': set(),
+    'REL': set(),
+    'CALL': set(),
+    'WHILE': set(),
+    'M_WHILE_FORE': set(),
+    'M_WHILE_TAIL': set(),
+    'READ': set(),
+    'READ_BEGIN': set(),
+    'WRITE': set(),
+    'WRITE_BEGIN': set(),
+}
 
 follow = {
-    'S': set(),
-    'S_': set(),
-    'B': set()
+    'PROG_': set(),
+    'PROG': set(),  #
+    'SUBPROG': set(),  #
+    'M_STATEMENT': set(),  #
+    'CONST': set(),  #
+    'CONST_': set(),
+    'CONST_DEF': set(),
+    'UINT': set(),
+    'VARIABLE': set(),  #
+    'VARIABLE_': set(),
+    'ID': set(),
+    'PROCEDURE': set(),  #
+    'PROCEDURE_': set(),
+    'PROC_HEAD': set(),
+    'STATEMENT': set(),
+    'ASSIGN': set(),
+    'COMP': set(),
+    'COMP_BEGIN': set(),
+    'COND': set(),
+    'M_COND': set(),  #
+    'CONDITION': set(),
+    'EXPR': set(),
+    'ITEM': set(),
+    'FACTOR': set(),
+    'PLUS_MINUS': set(),
+    'MUL_DIV': set(),
+    'REL': set(),
+    'CALL': set(),
+    'WHILE': set(),
+    'M_WHILE_FORE': set(),
+    'M_WHILE_TAIL': set(),
+    'READ': set(),
+    'READ_BEGIN': set(),
+    'WRITE': set(),
+    'WRITE_BEGIN': set(),
 }
-    
+
 def find_follow(begin_non_terminator):
     follow[begin_non_terminator].add('$')
 
-    search_list = list(itertools.product(NON_TERMINATOR_LIST, NON_TERMINATOR_LIST))
+    search_list = list(itertools.product(PL0_NON_TERMINATOR_NEW, PL0_NON_TERMINATOR_NEW))
 
     subset_relationships = set()
 
     for non_terminator_, non_terminator_to_search in search_list:
-        #print(non_terminator_to_search)
-        decisions = GRAMMAR_WITH_EPSILON.get(non_terminator_to_search)
+        # print(non_terminator_to_search)
+        decisions = PL0_GRAMMAR.get(non_terminator_to_search)
         # print(decisions)
         for decision in decisions:
 
@@ -60,9 +135,9 @@ def find_follow(begin_non_terminator):
                 if i != len(decision) - 1:
                     next_symbol = decision[i + 1]
     
-                    if next_symbol in TERMINATORS_LIST:
+                    if next_symbol in PL0_TERMINATOR_NEW:
                         follow[non_terminator_].add(next_symbol)
-                    elif next_symbol in NON_TERMINATOR_LIST:
+                    elif next_symbol in PL0_NON_TERMINATOR_NEW:
                         follow[non_terminator_].update(first[next_symbol])
                         follow[non_terminator_].discard('ε')
 
@@ -100,12 +175,12 @@ if __name__ == '__main__':
     # GRAMMAR = GRAMMAR
     GRAMMAR = GRAMMAR_WITH_EPSILON
 
-    for non_terminator in NON_TERMINATOR_LIST:
-        first[non_terminator] = find_first([non_terminator], NON_TERMINATOR_LIST, GRAMMAR_WITH_EPSILON, TERMINATORS_LIST)
+    for non_terminator in PL0_NON_TERMINATOR_NEW:
+        first[non_terminator] = find_first([non_terminator], PL0_NON_TERMINATOR_NEW, PL0_GRAMMAR, PL0_TERMINATOR_NEW)
 
     print(first)
 
-    find_follow('S_')
+    find_follow('PROG_')
 
     print(follow)
     
