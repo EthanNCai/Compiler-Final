@@ -1,7 +1,7 @@
 """
 这是伪代码！这不是真的代码，仅供参考！
 """
-from parser.Grammar import token_to_terminator_bb, GRAMMAR_WITH_EPSILON, PM_NON_TERMINATOR, PM_TERMINATOR, PM_GRAMMAR
+from parser.Grammar import token_to_terminator_bb, GRAMMAR_WITH_EPSILON, NON_TERMINATOR, TERMINATOR, GRAMMAR
 from lexer.Lexer import Lexer
 from pathlib import Path
 from parser.Parser import Parser
@@ -42,28 +42,22 @@ JSON = ROOT / 'lexer' / 'temp'
 构建项目集规范族
 """
 
-spec_family = SpecFamily(PM_GRAMMAR, PM_NON_TERMINATOR, PM_TERMINATOR)
+spec_family = SpecFamily(GRAMMAR, NON_TERMINATOR, TERMINATOR)
+for each_list in spec_family.content:
+    print('The grammar:')
+    for content in each_list.content:
+        print(content)
+    print('State: ', each_list.state)
+    print('Transform: ', each_list.transfrom)
+    print('----------------------------')
 
 """
 构建分析表
 """
 
-analysis_table = AnalysisTable(spec_family, PM_TERMINATOR, PM_NON_TERMINATOR)
-print(analysis_table.isLR1)
+analysis_table = AnalysisTable(spec_family, TERMINATOR, NON_TERMINATOR)
 analysis_table.to_excel('output.xlsx')
+print(analysis_table.isLR1)
 
-"""
-词法分析器分析
-"""
 
-# json_path = str(JSON / 'output.json')
-# test_path = str(TEST)
-# lexer = Lexer(test_path, json_path)
-# lexer.run()
 
-"""
-语法分析器
-"""
-
-# analysis_stack = Parser(analysis_table, json_path, token_to_terminator_bb)
-# analysis_stack.analyse()

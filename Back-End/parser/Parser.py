@@ -84,9 +84,10 @@ class Parser:
 
                     # 错误恢复：从栈顶开始回退，直到找到状态 s，该状态具有预先确定的非终结符 A 的转移
                     while len(self.state_stack) > 0:
-                        top_state = self.state_stack.pop()
+                        top_state = self.state_stack[-1]
                         if goto_table.get(recovery).get(top_state) is not None:
                             break
+                        self.state_stack.pop()
 
                     # 丢弃输入符号，直至找到符号 a，它可以合法地跟随 A
                     while len(input_buffer) > 0 and input_buffer[0] not in self.follow.get(recovery):
