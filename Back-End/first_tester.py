@@ -1,8 +1,8 @@
-from parser.Grammar import token_to_terminator_bb, GRAMMAR_WITH_EPSILON, PL0_NON_TERMINATOR_NEW, PL0_GRAMMAR, PL0_TERMINATOR_NEW
+from parser.Grammar import token_to_terminator_bb, GRAMMAR_WITH_EPSILON, PM_NON_TERMINATOR, PM_GRAMMAR, PM_TERMINATOR
 from parser.ExpressionFirstFinding import find_first
 
-ret = find_first(['VARIABLE', 'PROCEDURE', 'M_STATEMENT', 'STATEMENT', '.'], PL0_NON_TERMINATOR_NEW, PL0_GRAMMAR,
-           PL0_TERMINATOR_NEW)
+ret = find_first(['A', 'a', ], PM_NON_TERMINATOR, PM_GRAMMAR,
+           PM_TERMINATOR)
 print(ret)
 
 
